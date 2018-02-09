@@ -19,6 +19,7 @@ signals:
     void beginToDownload();
     void progress(qint64, qint64);
     void finished();
+    void nownum(qint32,qint32);
 public slots:
     void songDownloaded();
     void songListGot();
@@ -29,6 +30,7 @@ private:
     QString albumMid;
     QString albumDownloadLink;
     QString nowSongMid;
+    qint32 total;
 };
 
 #endif // ALBUM_H

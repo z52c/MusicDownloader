@@ -55,6 +55,7 @@ void album::songListGot()
         songMidList.append(songmid);
     }
     qDebug()<<songMidList;
+    total=songMidList.length();
     songDownloaded();
 }
 
@@ -64,6 +65,7 @@ void album::songDownloaded()
 {
     if(!songMidList.isEmpty())
     {
+        emit nownum(total-songMidList.length()+1,total);
         nowSongMid=songMidList.first();
         songMidList.removeAt(0);
         qDebug()<<"准备下载"<<nowSongMid;

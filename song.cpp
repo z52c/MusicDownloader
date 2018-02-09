@@ -134,15 +134,25 @@ void song::downloadSong()
     }
     qDebug()<<"mp3link:"<<mp3Link;
     qDebug()<<"mp3filename:"<<mp3FileName;
-    if(m!=NULL)
+    QFile a(mp3FileName);
+    if(a.exists())
     {
-        qDebug()<<"downloadsong : delete m";
-        //delete m;
+        qDebug()<<mp3FileName<<"已存在";
+        emit finished();
     }
-    m=new downloader(mp3Link,mp3FileName);
-    emit beginToDownload();
-    connect(m,SIGNAL(progress(qint64,qint64)),this,SIGNAL(progress(qint64,qint64)));
-    connect(m,SIGNAL(finished()),this,SIGNAL(finished()));
-    m->doDownload();
+    else
+    {
+        if(m!=NULL)
+        {
+            qDebug()<<"downloadsong : delete m";
+            //delete m;
+        }
+        m=new downloader(mp3Link,mp3FileName);
+        emit beginToDownload();
+        connect(m,SIGNAL(progress(qint64,qint64)),this,SIGNAL(progress(qint64,qint64)));
+        connect(m,SIGNAL(finished()),this,SIGNAL(finished()));
+        m->doDownload();
+    }
+
 }
 

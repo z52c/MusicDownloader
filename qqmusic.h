@@ -35,6 +35,7 @@ public:
     void downAlbum();
     void downPlayList();
 private slots:
+    void nownum(qint32 idx, qint32 total);
     void on_pushButtonDownload_clicked();
     void finished();
 

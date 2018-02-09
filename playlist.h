@@ -20,6 +20,7 @@ signals:
     void beginToDownload();
     void progress(qint64, qint64);
     void finished();
+    void nownum(qint32,qint32);
 
 public slots:
     void songDownloaded();
@@ -33,6 +34,7 @@ private:
     QString playListDownloadLink;
     QString nowSongMid;
     QString refererString;
+    qint32 total;
 };
 
 #endif // PLAYLIST_H

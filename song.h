@@ -1,6 +1,7 @@
 #ifndef SONG_H
 #define SONG_H
 
+#include <QFile>
 #include <QObject>
 #include "downloader.h"
 #include "daye.h"

@@ -17,11 +17,13 @@ qqmusic::qqmusic(QWidget *parent) :
     connect(a,SIGNAL(beginToDownload()),this,SLOT(beginToDownload()));
     connect(a,SIGNAL(finished()),this,SLOT(finished()));
     connect(a,SIGNAL(progress(qint64,qint64)),this,SLOT(downloadProgress(qint64,qint64)));
+    connect(a,SIGNAL(nownum(qint32,qint32)),this,SLOT(nownum(qint32,qint32)));
 
     p=new playlist();
     connect(p,SIGNAL(beginToDownload()),this,SLOT(beginToDownload()));
     connect(p,SIGNAL(finished()),this,SLOT(finished()));
     connect(p,SIGNAL(progress(qint64,qint64)),this,SLOT(downloadProgress(qint64,qint64)));
+    connect(p,SIGNAL(nownum(qint32,qint32)),this,SLOT(nownum(qint32,qint32)));
 }
 
 qqmusic::~qqmusic()
@@ -152,6 +154,13 @@ void qqmusic::doJob()
         downPlayList();
         return;
     }
+    if(url.contains("y.qq.com/n/yqq/playlist"))
+    {
+        getStringBetweenAandB(url.toStdString().c_str(),"y.qq.com/n/yqq/playlist/",".html",tmpMid);
+        mid=QString(tmpMid);
+        downPlayList();
+        return;
+    }
     ui->lineEditLink->setEnabled(true);
     ui->lineEditMp3Path->setEnabled(true);
     ui->pushButtonChoosePath->setEnabled(true);
@@ -195,4 +204,11 @@ void qqmusic::finished()
 void qqmusic::beginToDownload()
 {
     ui->labelStatus->setText(mp3FileName+QString("开始下载..."));
+}
+
+void qqmusic::nownum(qint32 idx, qint32 total)
+{
+    qDebug()<<idx<<" "<<total;
+    QString a=QString("当前第")+QString::number(idx)+QString("首，总")+QString::number(total)+QString("首");
+    ui->labelNowNum->setText(a);
 }
