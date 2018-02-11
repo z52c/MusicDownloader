@@ -39,6 +39,7 @@ void song::init(QString mid)
 
 void song::shtmlLinkDownloaded()
 {
+    int flag=0;
     QString line;
     QFile file(SONGHTMLFILE);
     if(file.open(QIODevice::ReadOnly))
@@ -48,6 +49,7 @@ void song::shtmlLinkDownloaded()
             line=file.readLine();
             if(line.contains(QString("window.songlist")))
             {
+                flag=1;
                 char tmpGuid[200];
                 char tmpVkey[200];
                 char tmpSongName[100];
@@ -81,6 +83,8 @@ void song::shtmlLinkDownloaded()
             }
         }
         file.close();
+        if(flag==0)
+            emit finished();
     }
 }
 

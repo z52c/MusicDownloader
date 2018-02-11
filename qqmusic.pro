@@ -11,7 +11,7 @@ RC_ICONS=1.ico
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = qqmusic
+TARGET = QQMusicDownloader
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -46,3 +46,10 @@ HEADERS += \
 
 FORMS += \
         qqmusic.ui
+
+VERSION = 1.1.0
+
+QMAKE_TARGET_PRODUCT = QQMusicDownloader
+QMAKE_TARGET_COMPANY = z52c
+QMAKE_TARGET_DESCRIPTION = QQMusicDownloader
+QMAKE_TARGET_COPYRIGHT = FREE
