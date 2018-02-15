@@ -4,24 +4,18 @@
 
 album::album()
 {
-
-}
-
-void album::init(QString mid)
-{
-    albumMid=mid;
-    qDebug()<<"album init";
-    /*if(d)
-        delete d;
-    if(tmpSong)
-        delete tmpSong;*/
     d=new downloader();
     tmpSong=new song();
     connect(tmpSong,SIGNAL(finished()),this,SLOT(songDownloaded()));
     connect(tmpSong,SIGNAL(progress(qint64,qint64)),this,SIGNAL(progress(qint64,qint64)));
     connect(tmpSong,SIGNAL(beginToDownload()),this,SIGNAL(beginToDownload()));
     connect(d,SIGNAL(finished()),this,SLOT(songListGot()));
-    qDebug()<<"album chushihua";
+}
+
+void album::init(QString mid)
+{
+    albumMid=mid;
+    qDebug()<<"album init";
     getSongList();
 }
 
@@ -73,5 +67,7 @@ void album::songDownloaded()
         qDebug()<<"2";
     }
     else
+    {
         emit finished();
+    }
 }

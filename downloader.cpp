@@ -3,7 +3,7 @@
 
 downloader::downloader()
 {
-
+    connect(&manager,SIGNAL(finished(QNetworkReply*)),SLOT(downloadFinished(QNetworkReply*)));
 }
 
 downloader::downloader(const QString inUrl,const QString inFileName)
@@ -17,7 +17,7 @@ void downloader::init(const QString inUrl, const QString inFileName)
 {
     url = QUrl::fromEncoded(inUrl.toLocal8Bit());
     fileName = inFileName;
-    connect(&manager,SIGNAL(finished(QNetworkReply*)),SLOT(downloadFinished(QNetworkReply*)));
+
 }
 
 void downloader::setUserAgent(const QString ua)
@@ -51,7 +51,7 @@ bool downloader::saveToDisk(QIODevice *data)
     }
     file.write(data->readAll());
     file.close();
-    qDebug()<<"66666";
+    qDebug()<<"66666"<<fileName;
     return true;
 }
 

@@ -2,17 +2,29 @@
 
 song::song()
 {
+    d=new downloader();
+    connect(d,SIGNAL(finished()),this,SLOT(shtmlLinkDownloaded()));
+    m=new downloader();
+    connect(m,SIGNAL(progress(qint64,qint64)),this,SIGNAL(progress(qint64,qint64)));
+    connect(m,SIGNAL(finished()),this,SIGNAL(finished()));
 
+}
+
+song::~song()
+{
+    delete d;
+    delete m;
 }
 
 song::song(QString mid)
 {
     songMid=mid;
-    if(d!=NULL)
-        delete d;
     d=new downloader();
+    m=new downloader();
     htmlLink=QString(GETVKEYLINKHEAD)+songMid+QString(GETVKEYLINKTAIL);
     connect(d,SIGNAL(finished()),this,SLOT(shtmlLinkDownloaded()));
+    connect(m,SIGNAL(progress(qint64,qint64)),this,SIGNAL(progress(qint64,qint64)));
+    connect(m,SIGNAL(finished()),this,SIGNAL(finished()));
     d->init(htmlLink,QString(SONGHTMLFILE));
     d->setUserAgent(QString(USERAGENT));
     d->doDownload();
@@ -22,16 +34,7 @@ void song::init(QString mid)
 {
     songMid=mid;
     htmlLink=QString(GETVKEYLINKHEAD)+songMid+QString(GETVKEYLINKTAIL);
-    qDebug()<<"song init1 -htmllink:"<<htmlLink;
-    if(d!=NULL)
-    {
-        qDebug()<<"song init delete d:";
-      //  delete d;
-    }
-    qDebug()<<"song init new d";
-    d=new downloader();
-    connect(d,SIGNAL(finished()),this,SLOT(shtmlLinkDownloaded()));
-    qDebug()<<"song init2 -htmllink:"<<htmlLink;
+
     d->init(htmlLink,QString(SONGHTMLFILE));
     d->setUserAgent(QString(USERAGENT));
     d->doDownload();
@@ -146,17 +149,10 @@ void song::downloadSong()
     }
     else
     {
-        if(m!=NULL)
-        {
-            qDebug()<<"downloadsong : delete m";
-            //delete m;
-        }
-        m=new downloader(mp3Link,mp3FileName);
+        m->init(mp3Link,mp3FileName);
         emit beginToDownload();
-        connect(m,SIGNAL(progress(qint64,qint64)),this,SIGNAL(progress(qint64,qint64)));
-        connect(m,SIGNAL(finished()),this,SIGNAL(finished()));
         m->doDownload();
     }
-
 }
+
 

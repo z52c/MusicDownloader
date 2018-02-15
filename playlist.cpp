@@ -9,8 +9,8 @@ void playlist::init(QString mid)
 {
     playListMid=mid;
     refererString =QString("https://y.qq.com/n/yqq/playsquare/")+mid+QString(".html");
-    d=new downloader();
-    tmpSong=new song();
+    d=NULL;
+    tmpSong=NULL;
     connect(tmpSong,SIGNAL(finished()),this,SLOT(songDownloaded()));
     connect(tmpSong,SIGNAL(progress(qint64,qint64)),this,SIGNAL(progress(qint64,qint64)));
     connect(tmpSong,SIGNAL(beginToDownload()),this,SIGNAL(beginToDownload()));
@@ -67,5 +67,11 @@ void playlist::songDownloaded()
         qDebug()<<"2";
     }
     else
+    {
+        if(d!=NULL)
+            delete d;
+        if(tmpSong!=NULL)
+            delete tmpSong;
         emit finished();
+    }
 }

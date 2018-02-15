@@ -24,7 +24,7 @@ public:
     void init(QString mid);
     void getSongLink();
     void downloadSong();
-
+    ~song();
 signals:
     void progress(qint64, qint64);
     void beginToDownload();
@@ -32,7 +32,6 @@ signals:
 
 public slots:
     void shtmlLinkDownloaded();
-   // void songFinished();
 private:
     QString songMid;
     QString htmlLink;
