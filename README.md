@@ -9,8 +9,9 @@ https://y.qq.com/n/yqq/song/002TGLL108wKSf.html
 https://y.qq.com/n/yqq/album/000nw1yB4XOs9j.html
 
 下载歌单所有单曲：
-只需在QQ音乐网页（https://y.qq.com/）找到歌单页面链接，粘贴到下载软件中，选择保存目录，音质，名称格式，下载即可。
+只需在QQ音乐网页（https://y.qq.com/）找到歌单页面链接（playlist或者playsquare），粘贴到下载软件中，选择保存目录，音质，名称格式，下载即可。
 https://y.qq.com/n/yqq/playsquare/2387043531.html
+
 
 
 
