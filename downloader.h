@@ -33,6 +33,7 @@ private slots:
 signals:
     void progress(qint64, qint64);
     void finished();
+    void downloadError();
 };
 
 #endif // DOWNLOADER_H

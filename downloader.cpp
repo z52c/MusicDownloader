@@ -77,6 +77,7 @@ void downloader::downloadFinished(QNetworkReply *reply)
     if(reply->error())
     {
         qDebug()<<"download "<<tmpUrl.toEncoded().constData()<<"failed : "<<reply->errorString();
+        emit downloadError();
     } else {
         if(isHttpRedirect(reply)){
             qDebug()<<"request was redirected.";

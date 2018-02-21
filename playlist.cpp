@@ -2,19 +2,18 @@
 
 playlist::playlist()
 {
-
+    d=new downloader();
+    tmpSong=new song();
+    connect(tmpSong,SIGNAL(finished()),this,SLOT(songDownloaded()));
+    connect(tmpSong,SIGNAL(progress(qint64,qint64)),this,SIGNAL(progress(qint64,qint64)));
+    connect(tmpSong,SIGNAL(beginToDownload()),this,SIGNAL(beginToDownload()));
+    connect(d,SIGNAL(finished()),this,SLOT(songListGot()));
 }
 
 void playlist::init(QString mid)
 {
     playListMid=mid;
     refererString =QString("https://y.qq.com/n/yqq/playsquare/")+mid+QString(".html");
-    d=NULL;
-    tmpSong=NULL;
-    connect(tmpSong,SIGNAL(finished()),this,SLOT(songDownloaded()));
-    connect(tmpSong,SIGNAL(progress(qint64,qint64)),this,SIGNAL(progress(qint64,qint64)));
-    connect(tmpSong,SIGNAL(beginToDownload()),this,SIGNAL(beginToDownload()));
-    connect(d,SIGNAL(finished()),this,SLOT(songListGot()));
     qDebug()<<"playlist chushihua";
     getSongList();
 }
@@ -68,10 +67,6 @@ void playlist::songDownloaded()
     }
     else
     {
-        if(d!=NULL)
-            delete d;
-        if(tmpSong!=NULL)
-            delete tmpSong;
         emit finished();
     }
 }

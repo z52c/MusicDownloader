@@ -6,14 +6,17 @@ song::song()
     connect(d,SIGNAL(finished()),this,SLOT(shtmlLinkDownloaded()));
     m=new downloader();
     connect(m,SIGNAL(progress(qint64,qint64)),this,SIGNAL(progress(qint64,qint64)));
-    connect(m,SIGNAL(finished()),this,SIGNAL(finished()));
-
+    connect(m,SIGNAL(finished()),this,SLOT(musicDownloaded()));
+    p=new downloader();
+    connect(p,SIGNAL(finished()),this,SLOT(picDownloaded()));
+    connect(p,SIGNAL(downloadError()),this,SIGNAL(finished()));
 }
 
 song::~song()
 {
     delete d;
     delete m;
+    delete p;
 }
 
 song::song(QString mid)
@@ -21,10 +24,13 @@ song::song(QString mid)
     songMid=mid;
     d=new downloader();
     m=new downloader();
+    p=new downloader();
     htmlLink=QString(GETVKEYLINKHEAD)+songMid+QString(GETVKEYLINKTAIL);
     connect(d,SIGNAL(finished()),this,SLOT(shtmlLinkDownloaded()));
     connect(m,SIGNAL(progress(qint64,qint64)),this,SIGNAL(progress(qint64,qint64)));
-    connect(m,SIGNAL(finished()),this,SIGNAL(finished()));
+    connect(m,SIGNAL(finished()),this,SIGNAL(musicDownloaded()));
+    connect(p,SIGNAL(finished()),this,SLOT(picDownloaded()));
+    connect(p,SIGNAL(downloadError()),this,SIGNAL(finished()));
     d->init(htmlLink,QString(SONGHTMLFILE));
     d->setUserAgent(QString(USERAGENT));
     d->doDownload();
@@ -55,20 +61,23 @@ void song::shtmlLinkDownloaded()
                 flag=1;
                 char tmpGuid[200];
                 char tmpVkey[200];
+                char tmpPicUrl[200];
                 char tmpSongName[100];
                 char tmpSingerName[100];
                 char tmpsizeape[20];
                 char tmpMediaMid[20];
-
+                char tmpAlbumName[100];
                 getStringBetweenAandB(line.toStdString().c_str(),"songname\":\"","\"",tmpSongName);
                 getStringBetweenAandB(line.toStdString().c_str(),"sizeape\":",",",tmpsizeape);
                 getStringBetweenAandB(line.toStdString().c_str(),"singername\":\"","\"",tmpSingerName);
                 getStringBetweenAandB(line.toStdString().c_str(),"strMediaMid\":\"","\"",tmpMediaMid);
-
+                getStringBetweenAandB(line.toStdString().c_str(),"\"pic\":\"//","\"",tmpPicUrl);
+                getStringBetweenAandB(line.toStdString().c_str(),"\"albumname\":\"","\",",tmpAlbumName);
 
                 line=file.readLine();
                 getStringBetweenAandB(line.toStdString().c_str(),"guid\":",",",tmpGuid);
                 getStringBetweenAandB(line.toStdString().c_str(),"vkey\":\"","\"",tmpVkey);
+
 
                 mediaMid=QString(tmpMediaMid);
                 sizeape=QString(tmpsizeape).toInt();
@@ -80,6 +89,8 @@ void song::shtmlLinkDownloaded()
                 songName.remove("/");
                 vkey=QString(tmpVkey);
                 guid=QString(tmpGuid);
+                picUrl=QString("https://")+QString(tmpPicUrl);
+                albumName=QString(tmpAlbumName);
                 qDebug()<<"sizeape:"<<sizeape;
                 downloadSong();
                 break;
@@ -155,4 +166,22 @@ void song::downloadSong()
     }
 }
 
+void song::musicDownloaded()
+{
+    qDebug()<<"准备下载图片";
+    qDebug()<<picUrl;
+   p->init(picUrl,"tmp.jpg");
+   p->doDownload();
+}
+
+void song::picDownloaded()
+{
+    tagtmp=new ID3tag(mp3FileName);
+    connect(tagtmp,SIGNAL(finished()),this,SIGNAL(finished()));
+    tagtmp->setTitle(songName);
+    tagtmp->setArtist(singerName);
+    tagtmp->setAlbum(albumName);
+    tagtmp->setPic(QString("tmp.jpg"));
+    tagtmp->doJob();
+}
 

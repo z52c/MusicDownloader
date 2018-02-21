@@ -6,6 +6,7 @@
 #include "downloader.h"
 #include "daye.h"
 #include "config.h"
+#include "id3tag.h"
 
 extern int songNameType;
 extern int songQuality;
@@ -29,9 +30,12 @@ signals:
     void progress(qint64, qint64);
     void beginToDownload();
     void finished();
+    void qqMusicStat(QString);
 
 public slots:
     void shtmlLinkDownloaded();
+    void picDownloaded();
+    void musicDownloaded();
 private:
     QString songMid;
     QString htmlLink;
@@ -39,11 +43,15 @@ private:
     QString singerName;
     QString vkey;
     QString guid;
+    QString picUrl;
+    QString albumName;
     int sizeape;
     QString mediaMid;
     QString mp3Link;
     downloader *d;
     downloader *m;
+    downloader *p;
+    ID3tag *tagtmp;
     QString tmpHtmlFileName;
 };
 

@@ -33,7 +33,8 @@ SOURCES += \
     daye.cpp \
     song.cpp \
     album.cpp \
-    playlist.cpp
+    playlist.cpp \
+    id3tag.cpp
 
 HEADERS += \
         qqmusic.h \
@@ -42,12 +43,13 @@ HEADERS += \
     daye.h \
     song.h \
     album.h \
-    playlist.h
+    playlist.h \
+    id3tag.h
 
 FORMS += \
         qqmusic.ui
 
-VERSION = 1.1.1
+VERSION = 1.2.0
 
 QMAKE_TARGET_PRODUCT = QQMusicDownloader
 QMAKE_TARGET_COMPANY = z52c
