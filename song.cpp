@@ -185,7 +185,7 @@ void song::musicDownloaded()
 void song::picDownloaded()
 {
     tagtmp=new ID3tag(mp3FileName);
-    connect(tagtmp,SIGNAL(finished()),this,SIGNAL(finished()));
+    connect(tagtmp,SIGNAL(finished()),this,SLOT(tagDone()));
     tagtmp->setTitle(songName);
     tagtmp->setArtist(singerName);
     tagtmp->setAlbum(albumName);
@@ -193,3 +193,8 @@ void song::picDownloaded()
     tagtmp->doJob();
 }
 
+void song::tagDone()
+{
+    delete tagtmp;
+    emit finished();
+}

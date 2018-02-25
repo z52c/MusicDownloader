@@ -36,6 +36,7 @@ public slots:
     void shtmlLinkDownloaded();
     void picDownloaded();
     void musicDownloaded();
+    void tagDone();
 private:
     QString songMid;
     QString htmlLink;
