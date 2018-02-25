@@ -70,6 +70,7 @@ void qqmusic::on_pushButtonDownload_clicked()
     ui->pushButtonChoosePath->setEnabled(false);
     ui->pushButtonDownload->setEnabled(false);
     ui->labelStatus->setText("准备开始下载...");
+    mp3Dir=ui->lineEditMp3Path->text();
     doJob();
 }
 
