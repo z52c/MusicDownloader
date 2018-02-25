@@ -168,10 +168,18 @@ void song::downloadSong()
 
 void song::musicDownloaded()
 {
-    qDebug()<<"准备下载图片";
-    qDebug()<<picUrl;
-   p->init(picUrl,"tmp.jpg");
-   p->doDownload();
+    if(songQuality==1 || songQuality==2)
+    {
+        qDebug()<<"准备下载图片";
+        qDebug()<<picUrl;
+        p->init(picUrl,"tmp.jpg");
+        p->doDownload();
+    }
+    else
+    {
+        emit finished();
+    }
+
 }
 
 void song::picDownloaded()

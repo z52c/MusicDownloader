@@ -1,4 +1,5 @@
 #include "id3tag.h"
+#include <QDebug>
 
 ID3tag::ID3tag(QObject *parent) : QObject(parent)
 {
@@ -49,21 +50,21 @@ ID3tag::ID3tag(QString fileName)
 void ID3tag::setTitle(QString t)
 {
     title=t;
-    titleSize=2*sizeof(title)+3;
+    titleSize=2*title.size()+3;
     titleHeader.size[3]=titleSize;
 }
 
 void ID3tag::setArtist(QString a)
 {
     artist=a;
-    artistSize=2*sizeof(a)+3;
+    artistSize=2*a.size()+3;
     artistHeader.size[3]=artistSize;
 }
 
 void ID3tag::setAlbum(QString a)
 {
     album=a;
-    albumSize=2*sizeof(album)+3;
+    albumSize=2*album.size()+3;
     albumHeader.size[3]=albumSize;
 }
 
@@ -84,6 +85,20 @@ void ID3tag::setPic(QString imageFileName)
 
 void ID3tag::doJob()
 {
+    qDebug()<<"title QString:"<<title;
+    qDebug()<<title.size();
+    qDebug()<<sizeof(title);
+    for(int i=0;i<2*title.size();i++)
+    {
+        qDebug()<<title.data()[i];
+    }
+    qDebug()<<"artist QString:"<<artist;
+    qDebug()<<artist.size();
+    qDebug()<<sizeof(artist);
+    for(int i=0;i<2*artist.size();i++)
+    {
+        qDebug()<<artist.data()[i];
+    }
     uchar unicodeBom[3]={0x01,0xFF,0xFE};
     int size=40+titleSize+artistSize+albumSize+picSize;
     tagHeader.size[0]=size/(128*128*128);
@@ -93,13 +108,13 @@ void ID3tag::doJob()
     dStream->writeRawData((char*)&tagHeader,10);
     dStream->writeRawData((char*)&titleHeader,10);
     dStream->writeRawData((char*)unicodeBom,3);
-    dStream->writeRawData((char*)title.data(),sizeof(title)*2);
+    dStream->writeRawData((char*)title.data(),title.size()*2);
     dStream->writeRawData((char*)&artistHeader,10);
     dStream->writeRawData((char*)unicodeBom,3);
-    dStream->writeRawData((char*)artist.data(),sizeof(artist)*2);
+    dStream->writeRawData((char*)artist.data(),artist.size()*2);
     dStream->writeRawData((char*)&albumHeader,10);
     dStream->writeRawData((char*)unicodeBom,3);
-    dStream->writeRawData((char*)album.data(),sizeof(album)*2);
+    dStream->writeRawData((char*)album.data(),album.size()*2);
     dStream->writeRawData((char*)&picHeader,10);
     dStream->writeRawData(mimeInfo,14);
     dStream->writeRawData((char*)image.data(),image.size());
