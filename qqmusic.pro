@@ -49,7 +49,7 @@ HEADERS += \
 FORMS += \
         qqmusic.ui
 
-VERSION = 1.2.0
+VERSION = 1.2.1
 
 QMAKE_TARGET_PRODUCT = QQMusicDownloader
 QMAKE_TARGET_COMPANY = z52c

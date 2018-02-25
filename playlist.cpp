@@ -33,9 +33,38 @@ void playlist::songListGot()
     QFile file(PLAYLISTFILE);
     int index=0;
     QString songmid;
+    QString playListName;
     file.open(QIODevice::ReadOnly);
     QString str=file.readAll();
     file.close();
+
+    //将歌单名字作为目录名
+    if(-1!=(index=str.indexOf("dissname",index)))
+    {
+        index+=11;
+        playListName="";
+        while(str.at(index)!='\"')
+        {
+            playListName+=str.at(index);
+            index++;
+        }
+        playListName.remove(QChar('|'));
+        playListName.remove(QChar('>'));
+        playListName.remove(QChar('<'));
+        playListName.remove(QChar('*'));
+        playListName.remove(QChar('?'));
+        qDebug()<<playListName;
+    }
+
+    if(!playListName.isEmpty())
+    {
+       mp3Dir=mp3Dir+QString("/")+playListName;
+       QDir tmp(mp3Dir);
+       if(!tmp.exists())
+       {
+           tmp.mkdir(mp3Dir);
+       }
+    }
     while(-1!=(index=str.indexOf("songmid",index)))
     {
         index+=10;

@@ -34,9 +34,38 @@ void album::songListGot()
     QFile file(ALBUMLISTFILE);
     int index=0;
     QString songmid;
+    QString albumDirName;
     file.open(QIODevice::ReadOnly);
     QString str=file.readAll();
     file.close();
+
+    //将专辑名字作为目录名
+    if(-1!=(index=str.indexOf("albumname",index)))
+    {
+        index+=12;
+        albumDirName="";
+        while(str.at(index)!='\"')
+        {
+            albumDirName+=str.at(index);
+            index++;
+        }
+        albumDirName.remove(QChar('|'));
+        albumDirName.remove(QChar('>'));
+        albumDirName.remove(QChar('<'));
+        albumDirName.remove(QChar('*'));
+        albumDirName.remove(QChar('?'));
+        qDebug()<<albumDirName;
+    }
+
+    if(!albumDirName.isEmpty())
+    {
+       mp3Dir=mp3Dir+QString("/")+albumDirName;
+       QDir tmp(mp3Dir);
+       if(!tmp.exists())
+       {
+           tmp.mkdir(mp3Dir);
+       }
+    }
     while(-1!=(index=str.indexOf("songmid",index)))
     {
         index+=10;
