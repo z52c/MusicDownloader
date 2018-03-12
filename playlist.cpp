@@ -53,6 +53,8 @@ void playlist::songListGot()
         playListName.remove(QChar('<'));
         playListName.remove(QChar('*'));
         playListName.remove(QChar('?'));
+        playListName.remove(QChar('/'));
+        playListName.remove(QChar('\\'));
         qDebug()<<playListName;
     }
 

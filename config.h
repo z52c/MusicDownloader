@@ -42,6 +42,7 @@
 #define ALBUMLISTFILE "albumlist.tmp"
 #define PLAYLISTFILE "playlist.tmp"
 #define SONGMIDFROMFILE "songmidfromfile.tmp"
+#define SEARCHRESULTFILE "search.tmp"
 
 
 

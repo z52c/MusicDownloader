@@ -9,20 +9,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>597</width>
-    <height>424</height>
+    <width>486</width>
+    <height>414</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>QQMusicDownloader</string>
+   <string>QQMusic&amp;NeteaseMusicDownloader</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>13</x>
-      <y>4</y>
-      <width>571</width>
+      <x>14</x>
+      <y>5</y>
+      <width>461</width>
       <height>351</height>
      </rect>
     </property>
@@ -55,7 +55,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEditMp3Path"/>
+        <widget class="QLineEdit" name="lineEditMp3Path">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pushButtonChoosePath">
@@ -148,6 +152,13 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>打开下载的位置</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
@@ -194,10 +205,18 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>597</width>
+     <width>486</width>
      <height>23</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="action"/>
+    <addaction name="action_2"/>
+   </widget>
+   <addaction name="menu"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -208,6 +227,16 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="action">
+   <property name="text">
+    <string>使用说明</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>要饭</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

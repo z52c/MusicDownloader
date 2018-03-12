@@ -54,6 +54,8 @@ void album::songListGot()
         albumDirName.remove(QChar('<'));
         albumDirName.remove(QChar('*'));
         albumDirName.remove(QChar('?'));
+        albumDirName.remove(QChar('/'));
+        albumDirName.remove(QChar('\\'));
         qDebug()<<albumDirName;
     }
 

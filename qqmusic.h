@@ -11,6 +11,10 @@
 #include "song.h"
 #include "album.h"
 #include "playlist.h"
+#include "neteasesong.h"
+#include "neteaseplaylist.h"
+#include "help.h"
+#include "thanks.h"
 
 extern int songNameType;
 extern int songQuality;
@@ -55,6 +59,16 @@ private slots:
     void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
     void beginToDownload();
 
+    void neteaseDownloadSong();
+    void neteaseeDownloadPlaylist();
+
+
+    void on_action_triggered();
+
+    void on_action_2_triggered();
+
+    void on_pushButton_clicked();
+
 private:
     Ui::qqmusic *ui;
     QString url;
@@ -63,6 +77,12 @@ private:
     song *m;
     album *a;
     playlist *p;
+
+    neteaseSong *nm;
+    neteasePlaylist *np;
+
+    help *h;
+    thanks *t;
 };
 
 #endif // QQMUSIC_H

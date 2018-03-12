@@ -1,11 +1,14 @@
 #include "qqmusic.h"
 #include "ui_qqmusic.h"
+#include <QDesktopServices>
 
 qqmusic::qqmusic(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::qqmusic)
 {
     ui->setupUi(this);
+    h=new help(this);
+    t=new thanks(this);
     songNameType=0;
     songQuality=0;
     m=new song;
@@ -24,11 +27,27 @@ qqmusic::qqmusic(QWidget *parent) :
     connect(p,SIGNAL(finished()),this,SLOT(finished()));
     connect(p,SIGNAL(progress(qint64,qint64)),this,SLOT(downloadProgress(qint64,qint64)));
     connect(p,SIGNAL(nownum(qint32,qint32)),this,SLOT(nownum(qint32,qint32)));
+
+    nm=new neteaseSong();
+    connect(nm,SIGNAL(finished()),this,SLOT(finished()));
+    connect(nm,SIGNAL(beginToDownload()),this,SLOT(beginToDownload()));
+    connect(nm,SIGNAL(progress(qint64,qint64)),this,SLOT(downloadProgress(qint64,qint64)));
+
+    np=new neteasePlaylist();
+    connect(np,SIGNAL(finished()),this,SLOT(finished()));
+    connect(np,SIGNAL(beginToDownload()),this,SLOT(beginToDownload()));
+    connect(np,SIGNAL(progress(qint64,qint64)),this,SLOT(downloadProgress(qint64,qint64)));
+    connect(np,SIGNAL(nownum(qint32,qint32)),this,SLOT(nownum(qint32,qint32)));
 }
 
 qqmusic::~qqmusic()
 {
     delete ui;
+    delete m;
+    delete a;
+    delete p;
+    delete nm;
+    delete np;
 }
 
 void qqmusic::on_pushButtonDownload_clicked()
@@ -114,7 +133,7 @@ void qqmusic::on_radioButtonQualityape_clicked()
 
 bool qqmusic::isUrlLegal()
 {
-    return(url.contains("y.qq.com"));
+    return(url.contains("y.qq.com")||url.contains("music.163.com"));
 }
 
 void qqmusic::downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
@@ -126,6 +145,7 @@ void qqmusic::downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
 void qqmusic::doJob()
 {
     char tmpMid[20];
+    int pos;
     if(url.contains("y.qq.com/n/yqq/song"))
     {
         getStringBetweenAandB(url.toStdString().c_str(),"y.qq.com/n/yqq/song/",".html",tmpMid);
@@ -162,6 +182,37 @@ void qqmusic::doJob()
         downPlayList();
         return;
     }
+
+    if(url.contains("song?id=")&&url.contains("music.163.com"))
+    {
+        if(url.contains("&"))
+        {
+            char a[20];
+            getStringBetweenAandB(url.toStdString().c_str(),"=","&",a);
+            mid=QString(a);
+        }else{
+            pos=url.indexOf(QString("="));
+            mid=url.mid(pos+1);
+        }
+        neteaseDownloadSong();
+        return;
+    }
+
+    if(url.contains("playlist?id=")&&url.contains("music.163.com"))
+    {
+        if(url.contains("&"))
+        {
+            char a[20];
+            getStringBetweenAandB(url.toStdString().c_str(),"=","&",a);
+            mid=QString(a);
+        }else{
+            pos=url.indexOf(QString("="));
+            mid=url.mid(pos+1);
+        }
+        neteaseeDownloadPlaylist();
+        return;
+    }
+
     ui->lineEditLink->setEnabled(true);
     ui->lineEditMp3Path->setEnabled(true);
     ui->pushButtonChoosePath->setEnabled(true);
@@ -192,6 +243,18 @@ void qqmusic::downSinger()
 
 }
 
+void qqmusic::neteaseDownloadSong()
+{
+    qDebug()<<mid;
+
+    nm->init(mid);
+}
+
+void qqmusic::neteaseeDownloadPlaylist()
+{
+    np->init(mid);
+}
+
 void qqmusic::finished()
 {
     ui->lineEditLink->setEnabled(true);
@@ -212,4 +275,20 @@ void qqmusic::nownum(qint32 idx, qint32 total)
     qDebug()<<idx<<" "<<total;
     QString a=QString("当前第")+QString::number(idx)+QString("首，总")+QString::number(total)+QString("首");
     ui->labelNowNum->setText(a);
+}
+
+void qqmusic::on_action_triggered()
+{
+
+    h->show();
+}
+
+void qqmusic::on_action_2_triggered()
+{
+    t->show();
+}
+
+void qqmusic::on_pushButton_clicked()
+{
+    QDesktopServices::openUrl(QUrl(mp3Dir.toStdString().c_str(),QUrl::TolerantMode));
 }

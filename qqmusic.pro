@@ -34,7 +34,11 @@ SOURCES += \
     song.cpp \
     album.cpp \
     playlist.cpp \
-    id3tag.cpp
+    id3tag.cpp \
+    neteasesong.cpp \
+    neteaseplaylist.cpp \
+    help.cpp \
+    thanks.cpp
 
 HEADERS += \
         qqmusic.h \
@@ -44,14 +48,23 @@ HEADERS += \
     song.h \
     album.h \
     playlist.h \
-    id3tag.h
+    id3tag.h \
+    neteasesong.h \
+    neteaseplaylist.h \
+    help.h \
+    thanks.h
 
 FORMS += \
-        qqmusic.ui
+        qqmusic.ui \
+    help.ui \
+    thanks.ui
 
-VERSION = 1.2.1
+VERSION = 1.3.2
 
-QMAKE_TARGET_PRODUCT = QQMusicDownloader
+QMAKE_TARGET_PRODUCT = QQMusic&NeteaseMusicDownloader
 QMAKE_TARGET_COMPANY = z52c
-QMAKE_TARGET_DESCRIPTION = QQMusicDownloader
+QMAKE_TARGET_DESCRIPTION = QQMusic&NeteaseMusicDownloader
 QMAKE_TARGET_COPYRIGHT = z52c
+
+RESOURCES += \
+    pic.qrc
