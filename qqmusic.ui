@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>486</width>
-    <height>414</height>
+    <width>483</width>
+    <height>415</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,9 +20,9 @@
    <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>14</x>
-      <y>5</y>
-      <width>461</width>
+      <x>15</x>
+      <y>6</y>
+      <width>451</width>
       <height>351</height>
      </rect>
     </property>
@@ -153,6 +153,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="pushButtonGray">
+         <property name="text">
+          <string>拯救网易云灰色歌曲</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="pushButton">
          <property name="text">
           <string>打开下载的位置</string>
@@ -205,7 +212,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>486</width>
+     <width>483</width>
      <height>23</height>
     </rect>
    </property>

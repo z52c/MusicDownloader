@@ -38,7 +38,8 @@ SOURCES += \
     neteasesong.cpp \
     neteaseplaylist.cpp \
     help.cpp \
-    thanks.cpp
+    thanks.cpp \
+    getgray.cpp
 
 HEADERS += \
         qqmusic.h \
@@ -52,14 +53,15 @@ HEADERS += \
     neteasesong.h \
     neteaseplaylist.h \
     help.h \
-    thanks.h
+    thanks.h \
+    getgray.h
 
 FORMS += \
         qqmusic.ui \
     help.ui \
     thanks.ui
 
-VERSION = 1.3.2
+VERSION = 1.3.3
 
 QMAKE_TARGET_PRODUCT = QQMusic&NeteaseMusicDownloader
 QMAKE_TARGET_COMPANY = z52c

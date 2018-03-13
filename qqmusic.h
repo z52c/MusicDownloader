@@ -15,6 +15,7 @@
 #include "neteaseplaylist.h"
 #include "help.h"
 #include "thanks.h"
+#include "getgray.h"
 
 extern int songNameType;
 extern int songQuality;
@@ -38,6 +39,8 @@ public:
     void downSong();
     void downAlbum();
     void downPlayList();
+    bool isUrlGrayLegal();
+
 private slots:
     void nownum(qint32 idx, qint32 total);
     void on_pushButtonDownload_clicked();
@@ -69,6 +72,8 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_pushButtonGray_clicked();
+
 private:
     Ui::qqmusic *ui;
     QString url;
@@ -83,6 +88,10 @@ private:
 
     help *h;
     thanks *t;
+
+    getGray *gg;
+
+    void doGrayJob();
 };
 
 #endif // QQMUSIC_H

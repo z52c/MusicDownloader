@@ -38,6 +38,12 @@ qqmusic::qqmusic(QWidget *parent) :
     connect(np,SIGNAL(beginToDownload()),this,SLOT(beginToDownload()));
     connect(np,SIGNAL(progress(qint64,qint64)),this,SLOT(downloadProgress(qint64,qint64)));
     connect(np,SIGNAL(nownum(qint32,qint32)),this,SLOT(nownum(qint32,qint32)));
+
+    gg=new getGray();
+    connect(gg,SIGNAL(finished()),this,SLOT(finished()));
+    connect(gg,SIGNAL(beginToDownload()),this,SLOT(beginToDownload()));
+    connect(gg,SIGNAL(progress(qint64,qint64)),this,SLOT(downloadProgress(qint64,qint64)));
+    connect(gg,SIGNAL(nownum(qint32,qint32)),this,SLOT(nownum(qint32,qint32)));
 }
 
 qqmusic::~qqmusic()
@@ -52,6 +58,7 @@ qqmusic::~qqmusic()
 
 void qqmusic::on_pushButtonDownload_clicked()
 {
+    ui->labelNowNum->setText(QString(""));
     if(songNameType == 0 || songQuality ==0)
     {
         ui->labelStatus->setText("请选择名称格式以及音质.");
@@ -88,6 +95,7 @@ void qqmusic::on_pushButtonDownload_clicked()
     ui->lineEditMp3Path->setEnabled(false);
     ui->pushButtonChoosePath->setEnabled(false);
     ui->pushButtonDownload->setEnabled(false);
+    ui->pushButtonGray->setEnabled(false);
     ui->labelStatus->setText("准备开始下载...");
     mp3Dir=ui->lineEditMp3Path->text();
     doJob();
@@ -262,6 +270,7 @@ void qqmusic::finished()
     ui->pushButtonChoosePath->setEnabled(true);
     ui->pushButtonDownload->setEnabled(true);
     ui->pushButtonDownload->setEnabled(true);
+    ui->pushButtonGray->setEnabled(true);
     ui->labelStatus->setText(mp3FileName+QString("下载结束..."));
 }
 
@@ -291,4 +300,73 @@ void qqmusic::on_action_2_triggered()
 void qqmusic::on_pushButton_clicked()
 {
     QDesktopServices::openUrl(QUrl(mp3Dir.toStdString().c_str(),QUrl::TolerantMode));
+}
+
+void qqmusic::on_pushButtonGray_clicked()
+{
+    ui->labelNowNum->setText(QString(""));
+    if(songNameType == 0 || songQuality ==0)
+    {
+        ui->labelStatus->setText("请选择名称格式以及音质.");
+        return;
+    }
+    url=ui->lineEditLink->text();
+    if(!isUrlLegal())
+    {
+        ui->labelStatus->setText("链接不合法，请检查链接.");
+        return ;
+    }
+    if(QString(ui->lineEditLink->text()).isEmpty())
+    {
+        ui->labelStatus->setText("请输入链接.");
+        return;
+    }
+    if(QString(ui->lineEditMp3Path->text()).isEmpty())
+    {
+        ui->labelStatus->setText("请选择保存目录.");
+        return;
+    }
+    if(!isUrlGrayLegal())
+    {
+        ui->labelStatus->setText("只能拯救网易云音乐歌单灰掉的音乐，请输入网易云音乐歌单链接.");
+        return;
+    }
+    QFileInfo tmpfileinfo(mp3Dir);
+    if(!tmpfileinfo.isDir())
+    {
+        ui->labelStatus->setText("请选择正确的保存目录.");
+        return;
+    }
+    ui->lineEditLink->setEnabled(false);
+    ui->lineEditMp3Path->setEnabled(false);
+    ui->pushButtonChoosePath->setEnabled(false);
+    ui->pushButtonDownload->setEnabled(false);
+    ui->pushButtonGray->setEnabled(false);
+    ui->labelStatus->setText("准备开始拯救灰掉的歌曲...");
+    mp3Dir=ui->lineEditMp3Path->text();
+    doGrayJob();
+}
+
+bool qqmusic::isUrlGrayLegal()
+{
+    if(url.contains("playlist?id=")&&url.contains("music.163.com"))
+    {
+        return true;
+    }
+    return false;
+}
+
+void qqmusic::doGrayJob()
+{
+    int pos;
+    if(url.contains("&"))
+    {
+        char a[20];
+        getStringBetweenAandB(url.toStdString().c_str(),"=","&",a);
+        mid=QString(a);
+    }else{
+        pos=url.indexOf(QString("="));
+        mid=url.mid(pos+1);
+    }
+    gg->init(mid);
 }
