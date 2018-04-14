@@ -1,3 +1,4 @@
+凉了，已经凉了！！！！！！
 
 中国之外不可用，没有代理选项！！！
 only available in China! no proxy !
