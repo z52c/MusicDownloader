@@ -67,17 +67,23 @@ void song::shtmlLinkDownloaded()
                 char tmpsizeape[20];
                 char tmpMediaMid[20];
                 char tmpAlbumName[100];
+                char tmpM4aUrl[200];
                 getStringBetweenAandB(line.toStdString().c_str(),"songname\":\"","\"",tmpSongName);
                 getStringBetweenAandB(line.toStdString().c_str(),"sizeape\":",",",tmpsizeape);
                 getStringBetweenAandB(line.toStdString().c_str(),"singername\":\"","\"",tmpSingerName);
                 getStringBetweenAandB(line.toStdString().c_str(),"strMediaMid\":\"","\"",tmpMediaMid);
                 getStringBetweenAandB(line.toStdString().c_str(),"\"pic\":\"//","\"",tmpPicUrl);
                 getStringBetweenAandB(line.toStdString().c_str(),"\"albumname\":\"","\",",tmpAlbumName);
+                getStringBetweenAandB(line.toStdString().c_str(),"m4aUrl\":\"","\"",tmpM4aUrl);
+                //line=file.readLine();
+               // getStringBetweenAandB(line.toStdString().c_str(),"guid\":",",",tmpGuid);
+               // getStringBetweenAandB(line.toStdString().c_str(),"vkey\":\"","\"",tmpVkey);
 
-                line=file.readLine();
-                getStringBetweenAandB(line.toStdString().c_str(),"guid\":",",",tmpGuid);
-                getStringBetweenAandB(line.toStdString().c_str(),"vkey\":\"","\"",tmpVkey);
 
+                getStringBetweenAandB(tmpM4aUrl,"guid=","&",tmpGuid);
+                getStringBetweenAandB(tmpM4aUrl,"vkey=","&",tmpVkey);
+                qDebug()<<tmpGuid;
+                qDebug()<<tmpVkey;
 
                 mediaMid=QString(tmpMediaMid);
                 sizeape=QString(tmpsizeape).toInt();

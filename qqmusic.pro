@@ -39,7 +39,8 @@ SOURCES += \
     neteaseplaylist.cpp \
     help.cpp \
     thanks.cpp \
-    getgray.cpp
+    getgray.cpp \
+    proxydialog.cpp
 
 HEADERS += \
         qqmusic.h \
@@ -54,14 +55,16 @@ HEADERS += \
     neteaseplaylist.h \
     help.h \
     thanks.h \
-    getgray.h
+    getgray.h \
+    proxydialog.h
 
 FORMS += \
         qqmusic.ui \
     help.ui \
-    thanks.ui
+    thanks.ui \
+    proxydialog.ui
 
-VERSION = 1.3.3
+VERSION = 1.3.4
 
 QMAKE_TARGET_PRODUCT = QQMusic&NeteaseMusicDownloader
 QMAKE_TARGET_COMPANY = z52c

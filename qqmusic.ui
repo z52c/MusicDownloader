@@ -17,7 +17,7 @@
    <string>QQMusic&amp;NeteaseMusicDownloader</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>15</x>
@@ -223,7 +223,14 @@
     <addaction name="action"/>
     <addaction name="action_2"/>
    </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>代理</string>
+    </property>
+    <addaction name="action_3"/>
+   </widget>
    <addaction name="menu"/>
+   <addaction name="menu_2"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -242,6 +249,11 @@
   <action name="action_2">
    <property name="text">
     <string>要饭</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>代理</string>
    </property>
   </action>
  </widget>

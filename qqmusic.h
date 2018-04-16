@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QDir>
 #include <QFileInfo>
+#include <QNetworkProxy>
 #include "downloader.h"
 #include "daye.h"
 #include "config.h"
@@ -74,6 +75,8 @@ private slots:
 
     void on_pushButtonGray_clicked();
 
+    void on_action_3_triggered();
+
 private:
     Ui::qqmusic *ui;
     QString url;
@@ -90,6 +93,8 @@ private:
     thanks *t;
 
     getGray *gg;
+
+    QNetworkProxy proxy;
 
     void doGrayJob();
 };

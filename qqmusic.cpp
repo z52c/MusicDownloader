@@ -1,6 +1,7 @@
 #include "qqmusic.h"
 #include "ui_qqmusic.h"
 #include <QDesktopServices>
+#include "proxydialog.h"
 
 qqmusic::qqmusic(QWidget *parent) :
     QMainWindow(parent),
@@ -369,4 +370,28 @@ void qqmusic::doGrayJob()
         mid=url.mid(pos+1);
     }
     gg->init(mid);
+}
+
+void qqmusic::on_action_3_triggered()
+{
+    proxyDialog dia;
+    QStringList a;
+    dia.exec();
+    a=dia.getInput();
+    if(a.at(0)==QString(""))
+    {
+        QNetworkProxy::setApplicationProxy(QNetworkProxy::NoProxy);
+        return;
+    }
+
+        proxy.setType(QNetworkProxy::Socks5Proxy);
+        proxy.setHostName(a.at(0));
+        proxy.setPort(QString(a.at(1)).toInt());
+        if(a.at(2)!=QString(""))
+        {
+            proxy.setUser(a.at(2));
+            proxy.setPassword(a.at(3));
+        }
+
+        QNetworkProxy::setApplicationProxy(proxy);
 }
