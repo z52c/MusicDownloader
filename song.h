@@ -12,7 +12,8 @@ extern int songNameType;
 extern int songQuality;
 extern QString mp3FileName;
 extern QString mp3Dir;
-
+extern QString vkey;
+extern QString guid;
 
 
 class song : public QObject
@@ -42,8 +43,7 @@ private:
     QString htmlLink;
     QString songName;
     QString singerName;
-    QString vkey;
-    QString guid;
+
     QString picUrl;
     QString albumName;
     int sizeape;

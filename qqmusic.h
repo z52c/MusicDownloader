@@ -22,6 +22,8 @@ extern int songNameType;
 extern int songQuality;
 extern QString mp3FileName;
 extern QString mp3Dir;
+extern QString vkey;
+extern QString guid;
 
 namespace Ui {
 class qqmusic;

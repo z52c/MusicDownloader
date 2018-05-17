@@ -64,7 +64,7 @@ FORMS += \
     thanks.ui \
     proxydialog.ui
 
-VERSION = 1.3.4
+VERSION = 1.3.5
 
 QMAKE_TARGET_PRODUCT = QQMusic&NeteaseMusicDownloader
 QMAKE_TARGET_COMPANY = z52c

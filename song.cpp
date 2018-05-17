@@ -68,6 +68,8 @@ void song::shtmlLinkDownloaded()
                 char tmpMediaMid[20];
                 char tmpAlbumName[100];
                 char tmpM4aUrl[200];
+
+                int tmpFlag=0;
                 getStringBetweenAandB(line.toStdString().c_str(),"songname\":\"","\"",tmpSongName);
                 getStringBetweenAandB(line.toStdString().c_str(),"sizeape\":",",",tmpsizeape);
                 getStringBetweenAandB(line.toStdString().c_str(),"singername\":\"","\"",tmpSingerName);
@@ -80,8 +82,17 @@ void song::shtmlLinkDownloaded()
                // getStringBetweenAandB(line.toStdString().c_str(),"vkey\":\"","\"",tmpVkey);
 
 
-                getStringBetweenAandB(tmpM4aUrl,"guid=","&",tmpGuid);
-                getStringBetweenAandB(tmpM4aUrl,"vkey=","&",tmpVkey);
+                tmpFlag=getStringBetweenAandB(tmpM4aUrl,"guid=","&",tmpGuid);
+                if(tmpFlag==0)
+                {
+                    guid=QString(tmpGuid);
+                }
+
+                tmpFlag=getStringBetweenAandB(tmpM4aUrl,"vkey=","&",tmpVkey);
+                if(tmpFlag==0)
+                {
+                    vkey=QString(tmpVkey);
+                }
                 qDebug()<<tmpGuid;
                 qDebug()<<tmpVkey;
 
@@ -93,8 +104,8 @@ void song::shtmlLinkDownloaded()
                 songName=QString(tmpSongName);
                 songName.remove("\\");
                 songName.remove("/");
-                vkey=QString(tmpVkey);
-                guid=QString(tmpGuid);
+
+
                 picUrl=QString("https://")+QString(tmpPicUrl);
                 albumName=QString(tmpAlbumName);
                 qDebug()<<"sizeape:"<<sizeape;
