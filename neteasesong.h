@@ -3,32 +3,26 @@
 
 #include <QObject>
 #include "downloader.h"
-#include <QFile>
-#include "song.h"
+#include "daye.h"
+#include "config.h"
+#include "qqmusicsearch.h"
 
 class neteaseSong : public QObject
 {
     Q_OBJECT
 public:
-    neteaseSong();
-    void init(QString mid);
-    void songInfoGot();
-    ~neteaseSong();
+    explicit neteaseSong(QObject *parent = nullptr);
+    void doJob(QString inMid);
 signals:
-    finished();
-    void progress(qint64, qint64);
-    void beginToDownload();
+    void finished(int ,bool,QString);
 public slots:
-    void htmlDownloaded();
-    void searchDownloaded();
-
+    void htmlFileGot();
+    void htmlFileGotFailed(QString errorString);
+    void searchResultGot(int inFlag,QString inString);
 private:
     downloader *d;
-    downloader *search;
-    QString songName;
-    QString singer;
-    QString album;
-    song *a;
+    qqMusicSearch *search;
+    bool isGray;
 };
 
 #endif // NETEASESONG_H

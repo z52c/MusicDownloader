@@ -1,397 +1,86 @@
 #include "qqmusic.h"
-#include "ui_qqmusic.h"
-#include <QDesktopServices>
-#include "proxydialog.h"
 
-qqmusic::qqmusic(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::qqmusic)
+qqmusic::qqmusic(QObject *parent) : QObject(parent)
 {
-    ui->setupUi(this);
-    h=new help(this);
-    t=new thanks(this);
-    songNameType=0;
-    songQuality=0;
-    m=new song;
-    connect(m,SIGNAL(progress(qint64,qint64)),this,SLOT(downloadProgress(qint64,qint64)));
-    connect(m,SIGNAL(finished()),this,SLOT(finished()));
-    connect(m,SIGNAL(beginToDownload()),this,SLOT(beginToDownload()));
-
-    a=new album();
-    connect(a,SIGNAL(beginToDownload()),this,SLOT(beginToDownload()));
-    connect(a,SIGNAL(finished()),this,SLOT(finished()));
-    connect(a,SIGNAL(progress(qint64,qint64)),this,SLOT(downloadProgress(qint64,qint64)));
-    connect(a,SIGNAL(nownum(qint32,qint32)),this,SLOT(nownum(qint32,qint32)));
-
-    p=new playlist();
-    connect(p,SIGNAL(beginToDownload()),this,SLOT(beginToDownload()));
-    connect(p,SIGNAL(finished()),this,SLOT(finished()));
-    connect(p,SIGNAL(progress(qint64,qint64)),this,SLOT(downloadProgress(qint64,qint64)));
-    connect(p,SIGNAL(nownum(qint32,qint32)),this,SLOT(nownum(qint32,qint32)));
-
-    nm=new neteaseSong();
-    connect(nm,SIGNAL(finished()),this,SLOT(finished()));
-    connect(nm,SIGNAL(beginToDownload()),this,SLOT(beginToDownload()));
-    connect(nm,SIGNAL(progress(qint64,qint64)),this,SLOT(downloadProgress(qint64,qint64)));
-
-    np=new neteasePlaylist();
-    connect(np,SIGNAL(finished()),this,SLOT(finished()));
-    connect(np,SIGNAL(beginToDownload()),this,SLOT(beginToDownload()));
-    connect(np,SIGNAL(progress(qint64,qint64)),this,SLOT(downloadProgress(qint64,qint64)));
-    connect(np,SIGNAL(nownum(qint32,qint32)),this,SLOT(nownum(qint32,qint32)));
-
-    gg=new getGray();
-    connect(gg,SIGNAL(finished()),this,SLOT(finished()));
-    connect(gg,SIGNAL(beginToDownload()),this,SLOT(beginToDownload()));
-    connect(gg,SIGNAL(progress(qint64,qint64)),this,SLOT(downloadProgress(qint64,qint64)));
-    connect(gg,SIGNAL(nownum(qint32,qint32)),this,SLOT(nownum(qint32,qint32)));
+    album=new qqMusicAlbum();
+    connect(album,SIGNAL(status(QString)),this,SIGNAL(status(QString)));
+    connect(album,SIGNAL(finished(int,QStringList)),this,SLOT(beginToDownload(int,QStringList)));
+    playlist=new qqMusicPlaylist();
+    connect(playlist,SIGNAL(status(QString)),this,SIGNAL(status(QString)));
+    connect(playlist,SIGNAL(finished(int,QStringList)),this,SLOT(beginToDownload(int,QStringList)));
+    song=new qqMusicSong();
+    connect(song,SIGNAL(status(QString)),this,SIGNAL(status(QString)));
+    connect(song,SIGNAL(progress(qint64,qint64)),this,SIGNAL(progress(qint64,qint64)));
+    connect(song,SIGNAL(finished(int)),this,SLOT(songDownloadFinished(int)));
 }
 
-qqmusic::~qqmusic()
+void qqmusic::doJob(QString inlink)
 {
-    delete ui;
-    delete m;
-    delete a;
-    delete p;
-    delete nm;
-    delete np;
-}
-
-void qqmusic::on_pushButtonDownload_clicked()
-{
-    ui->labelNowNum->setText(QString(""));
-    if(songNameType == 0 || songQuality ==0)
-    {
-        ui->labelStatus->setText("请选择名称格式以及音质.");
-        return;
-    }
-    url=ui->lineEditLink->text();
-    if(!isUrlLegal())
-    {
-        ui->labelStatus->setText("链接不合法，请检查链接.");
-        return ;
-    }
-    if(QString(ui->lineEditLink->text()).isEmpty())
-    {
-        ui->labelStatus->setText("请输入链接.");
-        return;
-    }
-    if(QString(ui->lineEditMp3Path->text()).isEmpty())
-    {
-        ui->labelStatus->setText("请选择保存目录.");
-        return;
-    }
-    if(!isUrlLegal())
-    {
-        ui->labelStatus->setText("链接不合法，请重新输入.");
-        return;
-    }
-    QFileInfo tmpfileinfo(mp3Dir);
-    if(!tmpfileinfo.isDir())
-    {
-        ui->labelStatus->setText("请选择正确的保存目录.");
-        return;
-    }
-    ui->lineEditLink->setEnabled(false);
-    ui->lineEditMp3Path->setEnabled(false);
-    ui->pushButtonChoosePath->setEnabled(false);
-    ui->pushButtonDownload->setEnabled(false);
-    ui->pushButtonGray->setEnabled(false);
-    ui->labelStatus->setText("准备开始下载...");
-    mp3Dir=ui->lineEditMp3Path->text();
-    doJob();
-}
-
-
-void qqmusic::on_pushButtonChoosePath_clicked()
-{
-    mp3Dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "/home", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-    ui->lineEditMp3Path->setText(mp3Dir);
-}
-
-
-void qqmusic::on_radioButtonSongNameType1_clicked()
-{
-    songNameType=1;
-}
-
-void qqmusic::on_radioButtonSongNameType2_clicked()
-{
-    songNameType=2;
-}
-
-void qqmusic::on_radioButtonQuality128_clicked()
-{
-    songQuality=1;
-}
-
-void qqmusic::on_radioButtonQuality320_clicked()
-{
-    songQuality=2;
-}
-
-void qqmusic::on_radioButtonQualityflac_clicked()
-{
-    songQuality=3;
-}
-
-void qqmusic::on_radioButtonQualityape_clicked()
-{
-    songQuality=4;
-}
-
-bool qqmusic::isUrlLegal()
-{
-    return(url.contains("y.qq.com")||url.contains("music.163.com"));
-}
-
-void qqmusic::downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
-{
-    ui->progressBar->setMaximum(bytesTotal);
-    ui->progressBar->setValue(bytesReceived);
-}
-
-void qqmusic::doJob()
-{
+    songMidList.clear();
+    index=0;
+    total=0;
     char tmpMid[20];
     int pos;
-    if(url.contains("y.qq.com/n/yqq/song"))
+    if(inlink.contains("y.qq.com/n/yqq/song"))
     {
-        getStringBetweenAandB(url.toStdString().c_str(),"y.qq.com/n/yqq/song/",".html",tmpMid);
-        mid=QString(tmpMid);
-        downSong();
+        getStringBetweenAandB(inlink.toStdString().c_str(),"y.qq.com/n/yqq/song/",".html",tmpMid);
+        songMidList.append(QString(tmpMid));
+        downloadSong();
         return;
     }
 
-    if(url.contains("y.qq.com/n/yqq/album"))
+    if(inlink.contains("y.qq.com/n/yqq/album"))
     {
-        getStringBetweenAandB(url.toStdString().c_str(),"y.qq.com/n/yqq/album/",".html",tmpMid);
-        mid=QString(tmpMid);
-        downAlbum();
-        return;
-    }
-  /*  if(url.contains("y.qq.com/n/yqq/singer"))
-    {
-        getStringBetweenAandB(url.toStdString().c_str(),"y.qq.com/n/yqq/singer/",".html",tmpMid);
-        mid=QString(tmpMid);
-        downSinger();
-        return;
-    }*/
-    if(url.contains("y.qq.com/n/yqq/playsquare"))
-    {
-        getStringBetweenAandB(url.toStdString().c_str(),"y.qq.com/n/yqq/playsquare/",".html",tmpMid);
-        mid=QString(tmpMid);
-        downPlayList();
-        return;
-    }
-    if(url.contains("y.qq.com/n/yqq/playlist"))
-    {
-        getStringBetweenAandB(url.toStdString().c_str(),"y.qq.com/n/yqq/playlist/",".html",tmpMid);
-        mid=QString(tmpMid);
-        downPlayList();
+        getStringBetweenAandB(inlink.toStdString().c_str(),"y.qq.com/n/yqq/album/",".html",tmpMid);
+        album->doJob(QString(tmpMid));
         return;
     }
 
-    if(url.contains("song?id=")&&url.contains("music.163.com"))
+    if(inlink.contains("y.qq.com/n/yqq/playsquare"))
     {
-        if(url.contains("&"))
-        {
-            char a[20];
-            getStringBetweenAandB(url.toStdString().c_str(),"=","&",a);
-            mid=QString(a);
-        }else{
-            pos=url.indexOf(QString("="));
-            mid=url.mid(pos+1);
-        }
-        neteaseDownloadSong();
+        getStringBetweenAandB(inlink.toStdString().c_str(),"y.qq.com/n/yqq/playsquare/",".html",tmpMid);
+        playlist->doJob(QString(tmpMid));
         return;
     }
-
-    if(url.contains("playlist?id=")&&url.contains("music.163.com"))
+    if(inlink.contains("y.qq.com/n/yqq/playlist"))
     {
-        if(url.contains("&"))
-        {
-            char a[20];
-            getStringBetweenAandB(url.toStdString().c_str(),"=","&",a);
-            mid=QString(a);
-        }else{
-            pos=url.indexOf(QString("="));
-            mid=url.mid(pos+1);
-        }
-        neteaseeDownloadPlaylist();
+        getStringBetweenAandB(inlink.toStdString().c_str(),"y.qq.com/n/yqq/playsquare/",".html",tmpMid);
+        playlist->doJob(QString(tmpMid));
         return;
     }
-
-    ui->lineEditLink->setEnabled(true);
-    ui->lineEditMp3Path->setEnabled(true);
-    ui->pushButtonChoosePath->setEnabled(true);
-    ui->pushButtonDownload->setEnabled(true);
-    ui->labelStatus->setText("链接不合法，请重新输入...");
-}
-
-void qqmusic::downSong()
-{
-    m->init(mid);
 }
 
 
-void qqmusic::downAlbum()
+void qqmusic::beginToDownload(int inFlag, QStringList inSongMidList)
 {
-
-    qDebug()<<"reay for allbum";
-    a->init(mid);
-}
-
-void qqmusic::downPlayList()
-{
-    p->init(mid);
-}
-
-void qqmusic::downSinger()
-{
-
-}
-
-void qqmusic::neteaseDownloadSong()
-{
-    qDebug()<<mid;
-
-    nm->init(mid);
-}
-
-void qqmusic::neteaseeDownloadPlaylist()
-{
-    np->init(mid);
-}
-
-void qqmusic::finished()
-{
-    ui->lineEditLink->setEnabled(true);
-    ui->lineEditMp3Path->setEnabled(true);
-    ui->pushButtonChoosePath->setEnabled(true);
-    ui->pushButtonDownload->setEnabled(true);
-    ui->pushButtonDownload->setEnabled(true);
-    ui->pushButtonGray->setEnabled(true);
-    ui->labelStatus->setText(mp3FileName+QString("下载结束..."));
-}
-
-void qqmusic::beginToDownload()
-{
-    ui->labelStatus->setText(mp3FileName+QString("开始下载..."));
-}
-
-void qqmusic::nownum(qint32 idx, qint32 total)
-{
-    qDebug()<<idx<<" "<<total;
-    QString a=QString("当前第")+QString::number(idx)+QString("首，总")+QString::number(total)+QString("首");
-    ui->labelNowNum->setText(a);
-}
-
-void qqmusic::on_action_triggered()
-{
-
-    h->show();
-}
-
-void qqmusic::on_action_2_triggered()
-{
-    t->show();
-}
-
-void qqmusic::on_pushButton_clicked()
-{
-    QDesktopServices::openUrl(QUrl(mp3Dir.toStdString().c_str(),QUrl::TolerantMode));
-}
-
-void qqmusic::on_pushButtonGray_clicked()
-{
-    ui->labelNowNum->setText(QString(""));
-    if(songNameType == 0 || songQuality ==0)
+    if(inFlag)
     {
-        ui->labelStatus->setText("请选择名称格式以及音质.");
+        emit finished();
         return;
     }
-    url=ui->lineEditLink->text();
-    if(!isUrlLegal())
-    {
-        ui->labelStatus->setText("链接不合法，请检查链接.");
-        return ;
+    else{
+        songMidList=inSongMidList;
+        downloadSong();
     }
-    if(QString(ui->lineEditLink->text()).isEmpty())
-    {
-        ui->labelStatus->setText("请输入链接.");
-        return;
-    }
-    if(QString(ui->lineEditMp3Path->text()).isEmpty())
-    {
-        ui->labelStatus->setText("请选择保存目录.");
-        return;
-    }
-    if(!isUrlGrayLegal())
-    {
-        ui->labelStatus->setText("只能拯救网易云音乐歌单灰掉的音乐，请输入网易云音乐歌单链接.");
-        return;
-    }
-    QFileInfo tmpfileinfo(mp3Dir);
-    if(!tmpfileinfo.isDir())
-    {
-        ui->labelStatus->setText("请选择正确的保存目录.");
-        return;
-    }
-    ui->lineEditLink->setEnabled(false);
-    ui->lineEditMp3Path->setEnabled(false);
-    ui->pushButtonChoosePath->setEnabled(false);
-    ui->pushButtonDownload->setEnabled(false);
-    ui->pushButtonGray->setEnabled(false);
-    ui->labelStatus->setText("准备开始拯救灰掉的歌曲...");
-    mp3Dir=ui->lineEditMp3Path->text();
-    doGrayJob();
 }
 
-bool qqmusic::isUrlGrayLegal()
+void qqmusic::downloadSong()
 {
-    if(url.contains("playlist?id=")&&url.contains("music.163.com"))
-    {
-        return true;
-    }
-    return false;
+    total=songMidList.count();
+    emit status(QString("下载第1/")+QString::number(total)+QString("首..."));
+    song->doJob(songMidList.at(0));
 }
 
-void qqmusic::doGrayJob()
+void qqmusic::songDownloadFinished(int inFlag)
 {
-    int pos;
-    if(url.contains("&"))
+    songMidList.removeAt(0);
+    if(songMidList.count()>0)
     {
-        char a[20];
-        getStringBetweenAandB(url.toStdString().c_str(),"=","&",a);
-        mid=QString(a);
-    }else{
-        pos=url.indexOf(QString("="));
-        mid=url.mid(pos+1);
+        emit status(QString("下载第")+QString::number(total-songMidList.count()+1)+QString("/")+QString::number(total)+QString("首..."));
+        song->doJob(songMidList.at(0));
     }
-    gg->init(mid);
-}
-
-void qqmusic::on_action_3_triggered()
-{
-    proxyDialog dia;
-    QStringList a;
-    dia.exec();
-    a=dia.getInput();
-    if(a.at(0)==QString(""))
-    {
-        QNetworkProxy::setApplicationProxy(QNetworkProxy::NoProxy);
-        return;
+    else{
+        emit finished();
     }
 
-        proxy.setType(QNetworkProxy::Socks5Proxy);
-        proxy.setHostName(a.at(0));
-        proxy.setPort(QString(a.at(1)).toInt());
-        if(a.at(2)!=QString(""))
-        {
-            proxy.setUser(a.at(2));
-            proxy.setPassword(a.at(3));
-        }
-
-        QNetworkProxy::setApplicationProxy(proxy);
 }

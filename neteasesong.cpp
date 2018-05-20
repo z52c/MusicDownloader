@@ -1,31 +1,34 @@
 #include "neteasesong.h"
-#include "config.h"
-#include "daye.h"
 
-neteaseSong::neteaseSong()
+neteaseSong::neteaseSong(QObject *parent) : QObject(parent)
 {
     d=new downloader();
-    connect(d,SIGNAL(finished()),this,SLOT(htmlDownloaded()));
+    d->setUserAgent(UA);
+    connect(d,SIGNAL(finished()),this,SLOT(htmlFileGot()));
+    connect(d,SIGNAL(downloadError(QString)),this,SLOT(htmlFileGotFailed(QString)));
+    connect(d,SIGNAL(redirected(QString)),this,SLOT(htmlFileGotFailed(QString)));
 
-    search=new downloader();
-    connect(search,SIGNAL(finished()),this,SLOT(searchDownloaded()));
-
-    a=new song();
-    connect(a,SIGNAL(beginToDownload()),this,SIGNAL(beginToDownload()));
-    connect(a,SIGNAL(progress(qint64,qint64)),this,SIGNAL(progress(qint64,qint64)));
-    connect(a,SIGNAL(finished()),this,SIGNAL(finished()));
+    search=new qqMusicSearch();
+    connect(search,SIGNAL(finished(int,QString)),this,SLOT(searchResultGot(int,QString)));
 }
 
-void neteaseSong::init(QString mid)
+void neteaseSong::doJob(QString inMid)
 {
-    QString tmpUrl=QString("http://music.163.com/song?id=")+mid;
+    QString tmpUrl=QString("http://music.163.com/song?id=")+inMid;
     qDebug()<<tmpUrl;
     d->init(tmpUrl,QString(SONGHTMLFILE));
-    d->doDownload();
+    d->doGet();
 }
 
-void neteaseSong::htmlDownloaded()
+
+void neteaseSong::htmlFileGotFailed(QString errorString)
 {
+    emit finished(-1,0,errorString);
+}
+
+void neteaseSong::htmlFileGot()
+{
+    isGray=false;
     QString line;
     QFile file(SONGHTMLFILE);
     file.open(QIODevice::ReadOnly);
@@ -35,6 +38,7 @@ void neteaseSong::htmlDownloaded()
     while(!file.atEnd())
     {
         line=file.readLine();
+
         if(line.contains(QString("appid")))
         {
             line=file.readLine();
@@ -46,47 +50,20 @@ void neteaseSong::htmlDownloaded()
             break;
         }
     }
-    file.close();
-    singer=QString(tmpSinger);
-    songName=QString(tmpSongName);
-    album=QString(tmpAlbum);
-    qDebug()<<singer+songName+album;
-
-    songInfoGot();
-}
-
-
-void neteaseSong::songInfoGot()
-{
-    QString request=songName+QString(" ")+singer+QString(" ")+album;
-    request=request.toUtf8().toPercentEncoding();
-    QString searchUrl="https://c.y.qq.com/soso/fcgi-bin/client_search_cp?ct=24&qqmusic_ver=1298&new_json=1&remoteplace=txt.yqq.center&searchid=46778975652331378&t=0&aggr=1&cr=1&catZhida=1&lossless=0&flag_qc=0&p=1&n=20&w=";
-    searchUrl=searchUrl+request+QString("&g_tk=5381&jsonpCallback=MusicJsonCallback20651003929414546&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0");
-
-    search->init(searchUrl,SEARCHRESULTFILE);
-    search->doDownload();
-
-}
-
-void neteaseSong::searchDownloaded()
-{
-    QFile file(SEARCHRESULTFILE);
-    QString line;
-    char tmpMid[30];
-    if(file.open(QIODevice::ReadOnly))
+    while(!file.atEnd())
     {
         line=file.readLine();
-        int pos=line.indexOf(QString("lyric"));
-        line=line.mid(pos);
-        getStringBetweenAandB(line.toStdString().c_str(),"mid\":\"","\"",tmpMid);
-
+        if(line.contains("u-btni-play"))
+        {
+            isGray=true;
+            break;
+        }
     }
     file.close();
-    qDebug()<<QString("search result:")+tmpMid;
-    a->init(QString(tmpMid));
+    search->doJob(QString(tmpSongName)+QString(" ")+QString(tmpSinger)+QString(" ")+QString(tmpAlbum));
 }
 
-neteaseSong::~neteaseSong()
+void neteaseSong::searchResultGot(int inFlag, QString inString)
 {
-    delete d;
+    finished(inFlag,isGray,inString);
 }
