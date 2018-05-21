@@ -7,7 +7,7 @@
 #include "neteaseplaylist.h"
 #include "help.h"
 #include "thanks.h"
-#include <QNetworkProxy>
+
 #include "proxyform.h"
 
 extern int songNameType;
@@ -69,12 +69,9 @@ private:
     thanks *t;
     proxyForm *p;
 
-    QString proxyAddr;
-    QString proxyPort;
-    QString proxyUser;
-    QString proxyPass;
 
-    QNetworkProxy proxy;
+
+
 };
 
 #endif // MAINWINDOW_H

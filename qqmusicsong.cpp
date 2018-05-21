@@ -113,7 +113,11 @@ void qqMusicSong::htmlGot()
         }
         file.close();
         if(flag==0)
+        {
+            emit status(songMid+QString("错误"));
             emit finished(-2);
+        }
+
     }
 }
 

@@ -7,47 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QFileInfo a("proxy.conf");
-    if(a.isFile())
-    {
-        QFile fileProxy("proxy.conf");
-        QString line;
-        char tmp[5000];
-        if(fileProxy.open(QIODevice::ReadOnly))
-        {
-             line=fileProxy.readLine();
-             fileProxy.close();
-        }
-        if(!line.isEmpty())
-        {
-             getStringBetweenAandB(line.toStdString().c_str(),"socks5Addr:\"","\"",tmp);
-             proxyAddr=QString(tmp);
-             getStringBetweenAandB(line.toStdString().c_str(),"socks5Port:\"","\"",tmp);
-             proxyPort=QString(tmp);
-             getStringBetweenAandB(line.toStdString().c_str(),"socks5User:\"","\"",tmp);
-             proxyUser=QString(tmp);
-             getStringBetweenAandB(line.toStdString().c_str(),"socks5Pass:\"","\"",tmp);
-             proxyPass=QString(tmp);
-             if(proxyAddr!=QString(""))
-             {
-                 proxy.setType(QNetworkProxy::Socks5Proxy);
-                 proxy.setHostName(proxyAddr);
-                 proxy.setPort(proxyPort.toInt());
-                 if(proxyUser!=QString(""))
-                 {
-                     proxy.setUser(proxyUser);
-                     proxy.setPassword(proxyPass);
-                 }
-                 QNetworkProxy::setApplicationProxy(proxy);
-                 ui->textEdit->append("socks5 setup!");
-                 ui->textEdit->append(QString("socks5Addr:")+proxyAddr);
-                 ui->textEdit->append(QString("socks5Port:")+proxyPort);
-                 ui->textEdit->append(QString("socks5User:")+proxyUser);
-                 ui->textEdit->append(QString("socks5Password:")+proxyPass);
-             }
-        }
-        fileProxy.close();
-    }
+
     h=new help();
     t=new thanks();
     p=new proxyForm();
