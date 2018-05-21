@@ -1,3 +1,4 @@
+原来的QQMUsicDownloader，代码重写了，顺便改名叫MusicDownloader，应该会比之前的更加健壮了
 ## 功能 ##
 
  - 下载QQ音乐**单曲**
