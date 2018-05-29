@@ -65,7 +65,7 @@ FORMS += \
     thanks.ui \
     proxyform.ui
 
-VERSION = 1.4.0
+VERSION = 1.4.1
 
 QMAKE_TARGET_PRODUCT = QQMusic&NeteaseMusicDownloader
 QMAKE_TARGET_COMPANY = z52c
@@ -74,3 +74,9 @@ QMAKE_TARGET_COPYRIGHT = z52c
 
 RESOURCES += \
     pic.qrc
+
+
+LIBS += -L"C:/OpenSSL-Win32/lib" -llibssl
+LIBS += -L"C:/OpenSSL-Win32/lib" -llibcrypto
+
+INCLUDEPATH += C:/OpenSSL-Win32/include

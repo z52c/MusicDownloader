@@ -150,5 +150,5 @@ void MainWindow::on_action_3_triggered()
 void MainWindow::on_pushButton_clicked()
 {
     qDebug()<<mp3Dir;
-    QDesktopServices::openUrl(QUrl(mp3Dir.toStdString().c_str(),QUrl::TolerantMode));
+    QDesktopServices::openUrl(QUrl::fromLocalFile(mp3Dir));
 }
