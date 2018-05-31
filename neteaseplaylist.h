@@ -2,34 +2,41 @@
 #define NETEASEPLAYLIST_H
 
 #include <QObject>
-#include "neteasesong.h"
 #include "downloader.h"
+#include "daye.h"
 #include "config.h"
+#include "neteasesong.h"
+
+extern int songNameType;
+extern int songQuality;
+extern QString mp3FileName;
+extern QString mp3Dir;
+extern QString vkey;
+extern QString guid;
+
 
 class neteasePlaylist : public QObject
 {
     Q_OBJECT
 public:
-    neteasePlaylist();
-    void init(QString mid);
-
+    explicit neteasePlaylist(QObject *parent = nullptr);
+    void doJob(bool inIsGray,QString inUrl);
 signals:
-    finished();
-    void progress(qint64, qint64);
-    void beginToDownload();
-    void nownum(qint32,qint32);
+    void finished(int ,QStringList);
+    void status(QString);
 public slots:
-    void htmlDownloaded();
-    void songDownloaded();
+    void htmlGot();
+    void htmlGotFailed(QString errorString);
+    void neteaseSongFinished(int inFlag,bool inIsGray,QString inString);
 private:
-    neteaseSong *s;
+    QString mid;
     downloader *d;
-    QList<QString> songMidList;
-    QString nowSongMid;
-    qint32 total;
+    neteaseSong *s;
+    QStringList songMidList;
+    bool isGray;
+    QStringList infoList;
+    QStringList grayList;
     QString listTitle;
-
-
 };
 
 #endif // NETEASEPLAYLIST_H

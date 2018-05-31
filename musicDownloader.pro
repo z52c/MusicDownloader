@@ -1,17 +1,16 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2018-02-01T16:47:13
+# Project created by QtCreator 2018-05-17T15:22:49
 #
 #-------------------------------------------------
 
-QT       += core gui
-QT +=network
+QT       += core gui network
 
 RC_ICONS=1.ico
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = QQMusicDownloader
+TARGET = musicDownloader
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -28,43 +27,45 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        qqmusic.cpp \
+        mainwindow.cpp \
     downloader.cpp \
     daye.cpp \
-    song.cpp \
-    album.cpp \
-    playlist.cpp \
+    qqmusicsong.cpp \
     id3tag.cpp \
+    qqmusicplaylist.cpp \
+    qqmusicalbum.cpp \
+    qqmusic.cpp \
+    qqmusicsearch.cpp \
     neteasesong.cpp \
     neteaseplaylist.cpp \
-    help.cpp \
     thanks.cpp \
-    getgray.cpp \
-    proxydialog.cpp
+    help.cpp \
+    proxyform.cpp
 
 HEADERS += \
-        qqmusic.h \
+        mainwindow.h \
     downloader.h \
     config.h \
     daye.h \
-    song.h \
-    album.h \
-    playlist.h \
+    qqmusicsong.h \
     id3tag.h \
+    qqmusicplaylist.h \
+    qqmusicalbum.h \
+    qqmusic.h \
+    qqmusicsearch.h \
     neteasesong.h \
     neteaseplaylist.h \
-    help.h \
     thanks.h \
-    getgray.h \
-    proxydialog.h
+    help.h \
+    proxyform.h
 
 FORMS += \
-        qqmusic.ui \
+        mainwindow.ui \
     help.ui \
     thanks.ui \
-    proxydialog.ui
+    proxyform.ui
 
-VERSION = 1.3.4
+VERSION = 1.4.1
 
 QMAKE_TARGET_PRODUCT = QQMusic&NeteaseMusicDownloader
 QMAKE_TARGET_COMPANY = z52c
@@ -73,3 +74,9 @@ QMAKE_TARGET_COPYRIGHT = z52c
 
 RESOURCES += \
     pic.qrc
+
+
+LIBS += -L"C:/OpenSSL-Win32/lib" -llibssl
+LIBS += -L"C:/OpenSSL-Win32/lib" -llibcrypto
+
+INCLUDEPATH += C:/OpenSSL-Win32/include

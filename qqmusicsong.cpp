@@ -1,52 +1,48 @@
-#include "song.h"
+#include "qqmusicsong.h"
 
-song::song()
+qqMusicSong::qqMusicSong(QObject *parent) : QObject(parent)
 {
     d=new downloader();
-    connect(d,SIGNAL(finished()),this,SLOT(shtmlLinkDownloaded()));
+    d->setUserAgent(USERAGENT);
+    connect(d,SIGNAL(downloadError(QString)),this,SLOT(htmlGotFailed(QString)));
+    connect(d,SIGNAL(redirected(QString)),this,SLOT(htmlGotFailed(QString)));
+    connect(d,SIGNAL(finished()),this,SLOT(htmlGot()));
+
     m=new downloader();
-    connect(m,SIGNAL(progress(qint64,qint64)),this,SIGNAL(progress(qint64,qint64)));
+    connect(m,SIGNAL(downloadError(QString)),this,SLOT(musicDownloadFailed(QString)));
+    connect(m,SIGNAL(redirected(QString)),this,SLOT(musicDownloadFailed(QString)));
     connect(m,SIGNAL(finished()),this,SLOT(musicDownloaded()));
-    p=new downloader();
-    connect(p,SIGNAL(finished()),this,SLOT(picDownloaded()));
-    connect(p,SIGNAL(downloadError()),this,SIGNAL(finished()));
-}
-
-song::~song()
-{
-    delete d;
-    delete m;
-    delete p;
-}
-
-song::song(QString mid)
-{
-    songMid=mid;
-    d=new downloader();
-    m=new downloader();
-    p=new downloader();
-    htmlLink=QString(GETVKEYLINKHEAD)+songMid+QString(GETVKEYLINKTAIL);
-    connect(d,SIGNAL(finished()),this,SLOT(shtmlLinkDownloaded()));
     connect(m,SIGNAL(progress(qint64,qint64)),this,SIGNAL(progress(qint64,qint64)));
-    connect(m,SIGNAL(finished()),this,SIGNAL(musicDownloaded()));
+
+    p=new downloader();
+    connect(p,SIGNAL(downloadError(QString)),this,SLOT(picDownloadFailed(QString)));
+    connect(p,SIGNAL(redirected(QString)),this,SLOT(picDownloadFailed(QString)));
     connect(p,SIGNAL(finished()),this,SLOT(picDownloaded()));
-    connect(p,SIGNAL(downloadError()),this,SIGNAL(finished()));
-    d->init(htmlLink,QString(SONGHTMLFILE));
-    d->setUserAgent(QString(USERAGENT));
-    d->doDownload();
 }
 
-void song::init(QString mid)
+void qqMusicSong::doJob(QString inMid)
 {
-    songMid=mid;
+    songMid=inMid;
     htmlLink=QString(GETVKEYLINKHEAD)+songMid+QString(GETVKEYLINKTAIL);
 
     d->init(htmlLink,QString(SONGHTMLFILE));
     d->setUserAgent(QString(USERAGENT));
-    d->doDownload();
+    d->doGet();
 }
 
-void song::shtmlLinkDownloaded()
+void qqMusicSong::htmlGotFailed(QString errorString)
+{
+    emit status(songMid+QString("-html下载失败，失败原因：")+errorString);
+    finished(-1);
+}
+
+
+/****************************
+ * html文件已经下载
+ * 找出mediaMid,vkey,guid,songName,albumName,picUrl,singerName
+ * **************************/
+
+void qqMusicSong::htmlGot()
 {
     int flag=0;
     QString line;
@@ -68,6 +64,8 @@ void song::shtmlLinkDownloaded()
                 char tmpMediaMid[20];
                 char tmpAlbumName[100];
                 char tmpM4aUrl[200];
+
+                int tmpFlag=0;
                 getStringBetweenAandB(line.toStdString().c_str(),"songname\":\"","\"",tmpSongName);
                 getStringBetweenAandB(line.toStdString().c_str(),"sizeape\":",",",tmpsizeape);
                 getStringBetweenAandB(line.toStdString().c_str(),"singername\":\"","\"",tmpSingerName);
@@ -80,8 +78,17 @@ void song::shtmlLinkDownloaded()
                // getStringBetweenAandB(line.toStdString().c_str(),"vkey\":\"","\"",tmpVkey);
 
 
-                getStringBetweenAandB(tmpM4aUrl,"guid=","&",tmpGuid);
-                getStringBetweenAandB(tmpM4aUrl,"vkey=","&",tmpVkey);
+                tmpFlag=getStringBetweenAandB(tmpM4aUrl,"guid=","&",tmpGuid);
+                if(tmpFlag==0)
+                {
+                    guid=QString(tmpGuid);
+                }
+
+                tmpFlag=getStringBetweenAandB(tmpM4aUrl,"vkey=","&",tmpVkey);
+                if(tmpFlag==0)
+                {
+                    vkey=QString(tmpVkey);
+                }
                 qDebug()<<tmpGuid;
                 qDebug()<<tmpVkey;
 
@@ -93,24 +100,75 @@ void song::shtmlLinkDownloaded()
                 songName=QString(tmpSongName);
                 songName.remove("\\");
                 songName.remove("/");
-                vkey=QString(tmpVkey);
-                guid=QString(tmpGuid);
+
+
                 picUrl=QString("https://")+QString(tmpPicUrl);
                 albumName=QString(tmpAlbumName);
                 qDebug()<<"sizeape:"<<sizeape;
+                file.close();
+                //开始下载音乐文件
                 downloadSong();
                 break;
             }
         }
         file.close();
         if(flag==0)
-            emit finished();
+        {
+            emit status(songMid+QString("错误"));
+            emit finished(-2);
+        }
+
     }
 }
 
-void song::getSongLink()
+void qqMusicSong::musicDownloadFailed(QString errorString)
 {
+    emit status(QString("下载失败：")+errorString);
+    finished(-2);
+}
 
+void qqMusicSong::musicDownloaded()
+{
+    if(songQuality==1 || songQuality==2)
+    {
+        qDebug()<<"准备下载图片";
+        qDebug()<<picUrl;
+        emit status("准备下载封面图片");
+        p->init(picUrl,"tmp.jpg");
+        p->doGet();
+    }
+    else
+    {
+        emit finished(0);
+    }
+}
+
+void qqMusicSong::picDownloadFailed(QString errorString)
+{
+    emit status(QString("封面图片下载失败:")+errorString+QString(",不设置封面图"));
+    finished(0);
+}
+
+void qqMusicSong::picDownloaded()
+{
+    tagtmp=new ID3tag(mp3FileName);
+    connect(tagtmp,SIGNAL(finished()),this,SLOT(tagDone()));
+    tagtmp->setTitle(songName);
+    tagtmp->setArtist(singerName);
+    tagtmp->setAlbum(albumName);
+    tagtmp->setPic(QString("tmp.jpg"));
+    tagtmp->doJob();
+}
+
+void qqMusicSong::tagDone()
+{
+    delete tagtmp;
+    emit status("封面图设置结束");
+    emit finished(0);
+}
+
+void qqMusicSong::getSongLink()
+{
     if(sizeape==0 || songQuality == 1)
     {
         mp3Link=QString(DOWNLOADLINKHEAD)+QString("M500")+mediaMid+QString(".mp3")+QString(DOWNLOADLINKMID)+vkey+QString(DOWNLOADLINKGUID)+guid+QString(DOWNLOADLINKTAIL);
@@ -134,8 +192,7 @@ void song::getSongLink()
     }
 }
 
-
-void song::downloadSong()
+void qqMusicSong::downloadSong()
 {
     getSongLink();
     if(songNameType==2)
@@ -162,45 +219,13 @@ void song::downloadSong()
     if(a.exists())
     {
         qDebug()<<mp3FileName<<"已存在";
-        emit finished();
+        emit status(mp3FileName+QString("已经存在"));
+        emit finished(0);
     }
     else
     {
         m->init(mp3Link,mp3FileName);
-        emit beginToDownload();
-        m->doDownload();
+        emit status(QString("准备下载")+mp3FileName);
+        m->doGet();
     }
-}
-
-void song::musicDownloaded()
-{
-    if(songQuality==1 || songQuality==2)
-    {
-        qDebug()<<"准备下载图片";
-        qDebug()<<picUrl;
-        p->init(picUrl,"tmp.jpg");
-        p->doDownload();
-    }
-    else
-    {
-        emit finished();
-    }
-
-}
-
-void song::picDownloaded()
-{
-    tagtmp=new ID3tag(mp3FileName);
-    connect(tagtmp,SIGNAL(finished()),this,SLOT(tagDone()));
-    tagtmp->setTitle(songName);
-    tagtmp->setArtist(singerName);
-    tagtmp->setAlbum(albumName);
-    tagtmp->setPic(QString("tmp.jpg"));
-    tagtmp->doJob();
-}
-
-void song::tagDone()
-{
-    delete tagtmp;
-    emit finished();
 }

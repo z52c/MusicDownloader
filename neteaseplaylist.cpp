@@ -1,24 +1,52 @@
 #include "neteaseplaylist.h"
 
-neteasePlaylist::neteasePlaylist()
+neteasePlaylist::neteasePlaylist(QObject *parent) : QObject(parent)
 {
+    isGray=false;
     d=new downloader();
-    connect(d,SIGNAL(finished()),this,SLOT(htmlDownloaded()));
-
+    d->setUserAgent(UA);
+    connect(d,SIGNAL(finished()),this,SLOT(htmlGot()));
+    connect(d,SIGNAL(downloadError(QString)),this,SLOT(htmlGotFailed(QString)));
+    connect(d,SIGNAL(redirected(QString)),this,SLOT(htmlGotFailed(QString)));
     s=new neteaseSong();
-    connect(s,SIGNAL(finished()),this,SLOT(songDownloaded()));
-    connect(s,SIGNAL(progress(qint64,qint64)),this,SIGNAL(progress(qint64,qint64)));
-    connect(s,SIGNAL(beginToDownload()),this,SIGNAL(beginToDownload()));
+    connect(s,SIGNAL(finished(int,bool,QString)),this,SLOT(neteaseSongFinished(int,bool,QString)));
 }
 
-void neteasePlaylist::init(QString mid)
+void neteasePlaylist::doJob(bool inIsGray,QString inUrl)
 {
+    isGray=inIsGray;
+    infoList.clear();
+    grayList.clear();
+    songMidList.clear();
+    listTitle="";
+    int pos;
+    if(inUrl.contains("playlist?id=")&&inUrl.contains("music.163.com"))
+    {
+        if(inUrl.contains("&"))
+        {
+            char a[20];
+            getStringBetweenAandB(inUrl.toStdString().c_str(),"=","&",a);
+            mid=QString(a);
+        }else{
+            pos=inUrl.indexOf(QString("="));
+            mid=inUrl.mid(pos+1);
+        }
+    }else{
+        finished(-1,infoList);
+    }
+
     QString listUrl=QString("http://music.163.com/playlist?id=")+mid;
     d->init(listUrl,SONGHTMLFILE);
-    d->doDownload();
+    d->doGet();
 }
 
-void neteasePlaylist::htmlDownloaded()
+void neteasePlaylist::htmlGotFailed(QString errorString)
+{
+    emit status(QString("neteasePlaylist html failed:")+errorString);
+    finished(-1,infoList);
+}
+
+void neteasePlaylist::htmlGot()
 {
     QFile file(SONGHTMLFILE);
     QString line;
@@ -56,6 +84,12 @@ void neteasePlaylist::htmlDownloaded()
     }
     file.close();
 
+    if(listTitle.isEmpty())
+    {
+        emit status("失败");
+        finished(-2,infoList);
+        return;
+    }
     listTitle.remove(QChar('|'));
     listTitle.remove(QChar('>'));
     listTitle.remove(QChar('<'));
@@ -70,19 +104,32 @@ void neteasePlaylist::htmlDownloaded()
     {
         tmp.mkdir(mp3Dir);
     }
-    total=songMidList.length();
-    songDownloaded();
+    s->doJob(songMidList.at(0));
 }
 
-void neteasePlaylist::songDownloaded()
+
+void neteasePlaylist::neteaseSongFinished(int inFlag,bool inIsGray,QString inString)
 {
-    if(!songMidList.isEmpty())
+    if(inFlag)
     {
-        emit nownum(total-songMidList.length()+1,total);
-        nowSongMid=songMidList.first();
+        emit status(songMidList.at(0)+QString("html下载失败:")+inString);
+    }
+    else{
+        if(inIsGray)
+            grayList.append(inString);
+        infoList.append(inString);
         songMidList.removeAt(0);
-        s->init(nowSongMid);
-    }else{
-        emit finished();
+        if(songMidList.count()>0)
+        {
+            s->doJob(songMidList.at(0));
+        }
+        else{
+            if(isGray){
+                emit finished(0,grayList);
+            }
+            else{
+                finished(0,infoList);
+            }
+        }
     }
 }

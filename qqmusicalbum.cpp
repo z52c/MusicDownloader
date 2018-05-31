@@ -1,36 +1,32 @@
-#include "album.h"
+#include "qqmusicalbum.h"
 
-
-
-album::album()
+qqMusicAlbum::qqMusicAlbum(QObject *parent) : QObject(parent)
 {
     d=new downloader();
-    tmpSong=new song();
-    connect(tmpSong,SIGNAL(finished()),this,SLOT(songDownloaded()));
-    connect(tmpSong,SIGNAL(progress(qint64,qint64)),this,SIGNAL(progress(qint64,qint64)));
-    connect(tmpSong,SIGNAL(beginToDownload()),this,SIGNAL(beginToDownload()));
-    connect(d,SIGNAL(finished()),this,SLOT(songListGot()));
+    connect(d,SIGNAL(finished()),this,SLOT(albumListGot()));
+    connect(d,SIGNAL(downloadError(QString)),this,SLOT(albumListGotFailed(QString)));
+    connect(d,SIGNAL(redirected(QString)),this,SLOT(albumListGotFailed(QString)));
 }
 
-void album::init(QString mid)
+void qqMusicAlbum::doJob(QString inMid)
 {
-    albumMid=mid;
-    qDebug()<<"album init";
-    getSongList();
-}
-
-void album::getSongList()
-{
+    albumMid=inMid;
     albumDownloadLink=QString(ALBUMLINKHEAD)+albumMid+QString(ALBUMLINKTAIL);
     d->init(albumDownloadLink,QString(ALBUMLISTFILE));
     qDebug()<<"准备下载专辑列表";
-    d->doDownload();
+    d->doGet();
 }
 
-
-//获取到专辑歌曲列表json后，找到歌曲mid保存到list中
-void album::songListGot()
+void qqMusicAlbum::albumListGotFailed(QString errorString)
 {
+    QStringList a;
+    emit status(QString("QQMusic albumlist json data download failed:")+errorString);
+    finished(-1,a);
+}
+
+void qqMusicAlbum::albumListGot()
+{
+    songMidList.clear();
     QFile file(ALBUMLISTFILE);
     int index=0;
     QString songmid;
@@ -57,6 +53,10 @@ void album::songListGot()
         albumDirName.remove(QChar('/'));
         albumDirName.remove(QChar('\\'));
         qDebug()<<albumDirName;
+    }else{
+        emit status("json 文件下载内容错误");
+        QStringList a;
+        finished(-1,a);
     }
 
     if(!albumDirName.isEmpty())
@@ -67,6 +67,11 @@ void album::songListGot()
        {
            tmp.mkdir(mp3Dir);
        }
+    }
+    else{
+        emit status("json 文件下载内容错误");
+        QStringList a;
+        finished(-1,a);
     }
     while(-1!=(index=str.indexOf("songmid",index)))
     {
@@ -80,25 +85,5 @@ void album::songListGot()
         songMidList.append(songmid);
     }
     qDebug()<<songMidList;
-    total=songMidList.length();
-    songDownloaded();
-}
-
-//一首歌曲下载之后查询list中有没有内容，有就调用tmpSong->init(songMid)执行下一个
-//如果没有内容，则发送 finished信号
-void album::songDownloaded()
-{
-    if(!songMidList.isEmpty())
-    {
-        emit nownum(total-songMidList.length()+1,total);
-        nowSongMid=songMidList.first();
-        songMidList.removeAt(0);
-        qDebug()<<"准备下载"<<nowSongMid;
-        tmpSong->init(nowSongMid); 
-        qDebug()<<"2";
-    }
-    else
-    {
-        emit finished();
-    }
+    finished(0,songMidList);
 }

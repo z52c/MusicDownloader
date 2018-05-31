@@ -1,6 +1,16 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 #include <QtGlobal>
+#include <QString>
+
+struct neteaseInfo{
+    QString singerName;
+    QString songName;
+    QString album;
+};
+
+#define UA " Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.26 Safari/537.36 Core/1.63.5221.400 QQBrowser/10.0.1125.400"
+#define REFERERURL "y.qq.com"
 
 #define DOWNLOADLINKHEAD "http://dl.stream.qqmusic.qq.com/"
 #define DOWNLOADLINKMID "?fromtag=64&vkey="
