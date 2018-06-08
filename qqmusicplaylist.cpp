@@ -1,4 +1,5 @@
 #include "qqmusicplaylist.h"
+#include "QtDebug"
 
 qqMusicPlaylist::qqMusicPlaylist(QObject *parent) : QObject(parent)
 {

@@ -20,7 +20,6 @@ void qqmusic::doJob(QString inlink)
     index=0;
     total=0;
     char tmpMid[20];
-    int pos;
     if(inlink.contains("y.qq.com/n/yqq/song"))
     {
         getStringBetweenAandB(inlink.toStdString().c_str(),"y.qq.com/n/yqq/song/",".html",tmpMid);
@@ -44,7 +43,7 @@ void qqmusic::doJob(QString inlink)
     }
     if(inlink.contains("y.qq.com/n/yqq/playlist"))
     {
-        getStringBetweenAandB(inlink.toStdString().c_str(),"y.qq.com/n/yqq/playsquare/",".html",tmpMid);
+        getStringBetweenAandB(inlink.toStdString().c_str(),"y.qq.com/n/yqq/playlist/",".html",tmpMid);
         playlist->doJob(QString(tmpMid));
         return;
     }
