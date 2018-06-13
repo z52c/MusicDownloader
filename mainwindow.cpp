@@ -23,13 +23,23 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(n,SIGNAL(status(QString)),this,SLOT(status(QString)));
     connect(n,SIGNAL(finished(int,QStringList)),q,SLOT(beginToDownload(int,QStringList)));
 
+    vkeyinit=new vkeyInit();
+    connect(vkeyinit,SIGNAL(status(QString)),this,SLOT(status(QString)));
+    connect(vkeyinit,SIGNAL(finished()),this,SLOT(initFinished()));
 
+    ui->pushButtonDownload->setEnabled(false);
+    vkeyinit->init();
 
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::initFinished()
+{
+    ui->pushButtonDownload->setEnabled(true);
 }
 
 void MainWindow::status(QString inString)

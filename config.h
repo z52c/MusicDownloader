@@ -26,6 +26,14 @@ struct neteaseInfo{
 #define GETVKEYLINKHEAD "https://i.y.qq.com/v8/playsong.html?ADTAG=newyqq.song&songmid="
 #define GETVKEYLINKTAIL "#webchat_redirect"
 
+//单曲信息
+#define SINGLESONGHEAD "https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?songmid="
+#define SINGLESONGTAIL "&tpl=yqq_song_detail&format=json&callback=getOneSongInfoCallback&g_tk=5381&jsonCallback=getOneSongInfoCallback&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"
+
+//专辑封面链接
+#define ALBUMPICLINKHEAD "https://y.gtimg.cn/music/photo_new/T002R800x800M000"
+#define ALBUMPICLINKTAIL ".jpg?max_age=2592000"
+
 //歌单下载链接
 #define PLAYLISTLINKHEAD "https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid="
 #define PALYLISTLINKTAIL "&format=jsonp&g_tk=5381&jsonpCallback=playlistinfoCallback&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"
@@ -53,6 +61,7 @@ struct neteaseInfo{
 #define PLAYLISTFILE "playlist.tmp"
 #define SONGMIDFROMFILE "songmidfromfile.tmp"
 #define SEARCHRESULTFILE "search.tmp"
+#define SONGINFOFILE "songInfo.json"
 
 
 

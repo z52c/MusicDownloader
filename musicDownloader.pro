@@ -40,7 +40,8 @@ SOURCES += \
     neteaseplaylist.cpp \
     thanks.cpp \
     help.cpp \
-    proxyform.cpp
+    proxyform.cpp \
+    vkeyinit.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -57,7 +58,8 @@ HEADERS += \
     neteaseplaylist.h \
     thanks.h \
     help.h \
-    proxyform.h
+    proxyform.h \
+    vkeyinit.h
 
 FORMS += \
         mainwindow.ui \
@@ -65,7 +67,7 @@ FORMS += \
     thanks.ui \
     proxyform.ui
 
-VERSION = 1.4.3
+VERSION = 1.5.0
 
 QMAKE_TARGET_PRODUCT = QQMusic&NeteaseMusicDownloader
 QMAKE_TARGET_COMPANY = z52c

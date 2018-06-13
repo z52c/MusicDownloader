@@ -6,6 +6,10 @@
 #include "downloader.h"
 #include "daye.h"
 #include "config.h"
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonParseError>
 
 extern int songNameType;
 extern int songQuality;
@@ -44,7 +48,9 @@ private:
 
     QString picUrl;
     QString albumName;
+    QString albumMid;
     int sizeape;
+    int size320;
     QString mediaMid;
     QString mp3Link;
     downloader *d;//下载html文件

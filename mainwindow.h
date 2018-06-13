@@ -7,6 +7,7 @@
 #include "neteaseplaylist.h"
 #include "help.h"
 #include "thanks.h"
+#include "vkeyinit.h"
 
 #include "proxyform.h"
 
@@ -60,6 +61,7 @@ private slots:
     void on_action_3_triggered();
 
     void on_pushButton_clicked();
+    void initFinished();
 
 private:
     Ui::MainWindow *ui;
@@ -69,7 +71,7 @@ private:
     thanks *t;
     proxyForm *p;
 
-
+    vkeyInit *vkeyinit;
 
 
 };

@@ -22,11 +22,12 @@ qqMusicSong::qqMusicSong(QObject *parent) : QObject(parent)
 
 void qqMusicSong::doJob(QString inMid)
 {
+    sizeape=0;
+    size320=0;
     songMid=inMid;
-    htmlLink=QString(GETVKEYLINKHEAD)+songMid+QString(GETVKEYLINKTAIL);
+    htmlLink=QString(SINGLESONGHEAD)+songMid+QString(SINGLESONGTAIL);
 
-    d->init(htmlLink,QString(SONGHTMLFILE));
-    d->setUserAgent(QString(USERAGENT));
+    d->init(htmlLink,QString(SONGINFOFILE));
     d->doGet();
 }
 
@@ -39,86 +40,53 @@ void qqMusicSong::htmlGotFailed(QString errorString)
 
 /****************************
  * html文件已经下载
- * 找出mediaMid,vkey,guid,songName,albumName,picUrl,singerName
+ * 找出mediaMid,songName,albumMid,singerName
  * **************************/
 
 void qqMusicSong::htmlGot()
 {
-    int flag=0;
-    QString line;
-    QFile file(SONGHTMLFILE);
+    QFile file(SONGINFOFILE);
     if(file.open(QIODevice::ReadOnly))
     {
-        while(!file.atEnd())
+        QByteArray b=file.readAll();
+        QJsonParseError jsonError;
+        QJsonDocument doucment = QJsonDocument::fromJson(b,&jsonError);
+        if(jsonError.error!=QJsonParseError::NoError)
         {
-            line=file.readLine();
-            if(line.contains(QString("window.songlist")))
-            {
-                flag=1;
-                char tmpGuid[200];
-                char tmpVkey[200];
-                char tmpPicUrl[200];
-                char tmpSongName[100];
-                char tmpSingerName[100];
-                char tmpsizeape[20];
-                char tmpMediaMid[20];
-                char tmpAlbumName[100];
-                char tmpM4aUrl[200];
-
-                int tmpFlag=0;
-                getStringBetweenAandB(line.toStdString().c_str(),"songname\":\"","\"",tmpSongName);
-                getStringBetweenAandB(line.toStdString().c_str(),"sizeape\":",",",tmpsizeape);
-                getStringBetweenAandB(line.toStdString().c_str(),"singername\":\"","\"",tmpSingerName);
-                getStringBetweenAandB(line.toStdString().c_str(),"strMediaMid\":\"","\"",tmpMediaMid);
-                getStringBetweenAandB(line.toStdString().c_str(),"\"pic\":\"//","\"",tmpPicUrl);
-                getStringBetweenAandB(line.toStdString().c_str(),"\"albumname\":\"","\",",tmpAlbumName);
-                getStringBetweenAandB(line.toStdString().c_str(),"m4aUrl\":\"","\"",tmpM4aUrl);
-                //line=file.readLine();
-               // getStringBetweenAandB(line.toStdString().c_str(),"guid\":",",",tmpGuid);
-               // getStringBetweenAandB(line.toStdString().c_str(),"vkey\":\"","\"",tmpVkey);
-
-
-                tmpFlag=getStringBetweenAandB(tmpM4aUrl,"guid=","&",tmpGuid);
-                if(tmpFlag==0)
-                {
-                    guid=QString(tmpGuid);
-                }
-
-                tmpFlag=getStringBetweenAandB(tmpM4aUrl,"vkey=","&",tmpVkey);
-                if(tmpFlag==0)
-                {
-                    vkey=QString(tmpVkey);
-                }
-                qDebug()<<tmpGuid;
-                qDebug()<<tmpVkey;
-
-                mediaMid=QString(tmpMediaMid);
-                sizeape=QString(tmpsizeape).toInt();
-                singerName=QString(tmpSingerName);
-                singerName.remove("\\");
-                singerName.remove("/");
-                songName=QString(tmpSongName);
-                songName.remove("\\");
-                songName.remove("/");
-
-
-                picUrl=QString("https://")+QString(tmpPicUrl);
-                picUrl.replace("300x300","800x800");
-                albumName=QString(tmpAlbumName);
-                qDebug()<<"sizeape:"<<sizeape;
-                file.close();
-                //开始下载音乐文件
-                downloadSong();
-                break;
-            }
+            qDebug() << "read singleSong json file failed";
+            emit("read singleSong json file failed");
+            file.close();
         }
+        QJsonObject obj=doucment.object();
+        QJsonArray tmpArray=obj["data"].toArray();
+        obj=tmpArray.first().toObject();
+
+        QJsonObject tmpObj=obj["album"].toObject();
+        albumMid=tmpObj["mid"].toString();
+        albumName=tmpObj["name"].toString();
+
+        picUrl=QString(ALBUMLINKHEAD)+albumMid+QString(ALBUMLINKTAIL);
+
+        songName=obj["name"].toString();
+
+        tmpObj=obj["file"].toObject();
+        sizeape=tmpObj["size_ape"].toInt();
+        size320=tmpObj["size_320mp3"].toInt();
+        mediaMid=tmpObj["media_mid"].toString();
+
+        tmpArray=obj["singer"].toArray();
+        tmpObj=tmpArray.first().toObject();
+        singerName=tmpObj["name"].toString();
+        tmpArray.removeFirst();
+        while(tmpArray.count()>0)
+        {
+            tmpObj=tmpArray.first().toObject();
+            singerName=singerName+QString("/")+tmpObj["name"].toString();
+        }
+
+ //       singerName.remove("\\");
         file.close();
-        if(flag==0)
-        {
-            emit status(songMid+QString("错误"));
-            emit finished(-2);
-        }
-
+        downloadSong();
     }
 }
 
@@ -170,12 +138,16 @@ void qqMusicSong::tagDone()
 
 void qqMusicSong::getSongLink()
 {
-    if(sizeape==0 || songQuality == 1)
+    if(size320==0 || songQuality == 1)
     {
         mp3Link=QString(DOWNLOADLINKHEAD)+QString("M500")+mediaMid+QString(".mp3")+QString(DOWNLOADLINKMID)+vkey+QString(DOWNLOADLINKGUID)+guid+QString(DOWNLOADLINKTAIL);
         return ;
     }
 
+    if(sizeape==0 || songQuality == 2)
+    {
+        mp3Link=QString(DOWNLOADLINKHEAD)+QString("M800")+mediaMid+QString(".mp3")+QString(DOWNLOADLINKMID)+vkey+QString(DOWNLOADLINKGUID)+guid+QString(DOWNLOADLINKTAIL);
+    }
 
     switch (songQuality) {
     case 2:
