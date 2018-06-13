@@ -63,25 +63,30 @@ void qqMusicSong::htmlGot()
 
         QJsonObject tmpObj=obj["album"].toObject();
         albumMid=tmpObj["mid"].toString();
+        qDebug()<<albumMid;
         albumName=tmpObj["name"].toString();
-
+        qDebug()<<albumName;
         picUrl=QString(ALBUMLINKHEAD)+albumMid+QString(ALBUMLINKTAIL);
-
+        qDebug()<<picUrl;
         songName=obj["name"].toString();
-
+        qDebug()<<songName;
         tmpObj=obj["file"].toObject();
         sizeape=tmpObj["size_ape"].toInt();
         size320=tmpObj["size_320mp3"].toInt();
+        qDebug()<<size320;
         mediaMid=tmpObj["media_mid"].toString();
-
+        qDebug()<<mediaMid;
         tmpArray=obj["singer"].toArray();
         tmpObj=tmpArray.first().toObject();
         singerName=tmpObj["name"].toString();
+        qDebug()<<singerName;
         tmpArray.removeFirst();
         while(tmpArray.count()>0)
         {
             tmpObj=tmpArray.first().toObject();
             singerName=singerName+QString("/")+tmpObj["name"].toString();
+            tmpArray.removeFirst();
+            qDebug()<<singerName;
         }
 
  //       singerName.remove("\\");
