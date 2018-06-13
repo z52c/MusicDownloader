@@ -51,6 +51,8 @@ void MainWindow::qqmusicFinished()
 
 void MainWindow::on_pushButtonDownload_clicked()
 {
+    ui->progressBar->setMaximum(100);
+    ui->progressBar->setValue(0);
     mp3Dir=ui->lineEditMp3Path->text();
     ui->textEdit->clear();
     if(!songNameType || !songQuality || ui->lineEditMp3Path->text().isEmpty() || ui->lineEditLink->text().isEmpty())

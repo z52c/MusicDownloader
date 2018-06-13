@@ -65,7 +65,7 @@ FORMS += \
     thanks.ui \
     proxyform.ui
 
-VERSION = 1.4.2
+VERSION = 1.4.3
 
 QMAKE_TARGET_PRODUCT = QQMusic&NeteaseMusicDownloader
 QMAKE_TARGET_COMPANY = z52c

@@ -103,6 +103,7 @@ void qqMusicSong::htmlGot()
 
 
                 picUrl=QString("https://")+QString(tmpPicUrl);
+                picUrl.replace("300x300","800x800");
                 albumName=QString(tmpAlbumName);
                 qDebug()<<"sizeape:"<<sizeape;
                 file.close();
