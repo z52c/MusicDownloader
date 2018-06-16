@@ -66,7 +66,7 @@ void qqMusicSong::htmlGot()
         qDebug()<<albumMid;
         albumName=tmpObj["name"].toString();
         qDebug()<<albumName;
-        picUrl=QString(ALBUMLINKHEAD)+albumMid+QString(ALBUMLINKTAIL);
+        picUrl=QString(ALBUMPICLINKHEAD)+albumMid+QString(ALBUMPICLINKTAIL);
         qDebug()<<picUrl;
         songName=obj["name"].toString();
         qDebug()<<songName;
