@@ -31,7 +31,14 @@ void neteasePlaylist::doJob(bool inIsGray,QString inUrl)
             pos=inUrl.indexOf(QString("="));
             mid=inUrl.mid(pos+1);
         }
-    }else{
+    }else if(inUrl.contains("playlist/"))
+    {
+        char a[20];
+        getStringBetweenAandB(inUrl.toStdString().c_str(),"playlist/","/",a);
+        mid=QString(a);
+    }
+    else
+    {
         finished(-1,infoList);
     }
 
