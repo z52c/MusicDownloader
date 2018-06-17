@@ -69,6 +69,8 @@ void qqMusicSong::htmlGot()
         picUrl=QString(ALBUMPICLINKHEAD)+albumMid+QString(ALBUMPICLINKTAIL);
         qDebug()<<picUrl;
         songName=obj["name"].toString();
+        songName.remove("\\");
+        singerName.remove("/");
         qDebug()<<songName;
         tmpObj=obj["file"].toObject();
         sizeape=tmpObj["size_ape"].toInt();
@@ -79,17 +81,19 @@ void qqMusicSong::htmlGot()
         tmpArray=obj["singer"].toArray();
         tmpObj=tmpArray.first().toObject();
         singerName=tmpObj["name"].toString();
+        singerName.remove("\\");
+        singerName.remove("/");
         qDebug()<<singerName;
         tmpArray.removeFirst();
         while(tmpArray.count()>0)
         {
             tmpObj=tmpArray.first().toObject();
-            singerName=singerName+QString("/")+tmpObj["name"].toString();
+            singerName=singerName+QString("-")+tmpObj["name"].toString();
             tmpArray.removeFirst();
             qDebug()<<singerName;
         }
 
- //       singerName.remove("\\");
+
         file.close();
         downloadSong();
     }
