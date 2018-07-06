@@ -12,10 +12,15 @@ struct neteaseInfo{
 #define UA " Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.26 Safari/537.36 Core/1.63.5221.400 QQBrowser/10.0.1125.400"
 #define REFERERURL "y.qq.com"
 
+
 #define DOWNLOADLINKHEAD "http://dl.stream.qqmusic.qq.com/"
 #define DOWNLOADLINKMID "?fromtag=64&vkey="
 #define DOWNLOADLINKGUID "&guid="
 #define DOWNLOADLINKTAIL "&fromtag=1"
+
+#define NDOWNLOADLINKHEAD "http://streamoc.music.tc.qq.com/"
+#define NDOWNLOADLINKMID "?vkey="
+#define NDOWNLOADLINKTAIL "&guid=1234567890&uin=1008611&fromtag=8"
 
 //歌曲html页面链接  HEAD+SONGMID+TAIL
  #define SONGLINKHEAD "https://y.qq.com/n/yqq/song/"

@@ -10,6 +10,7 @@ QString mp3FileName;
 QString mp3Dir;
 QString vkey;
 QString guid;
+QString vkey2;
 
 int main(int argc, char *argv[])
 {

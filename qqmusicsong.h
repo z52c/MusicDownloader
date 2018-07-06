@@ -17,6 +17,7 @@ extern QString mp3FileName;
 extern QString mp3Dir;
 extern QString vkey;
 extern QString guid;
+extern QString vkey2;
 
 
 class qqMusicSong : public QObject

@@ -8,6 +8,7 @@
 #include "help.h"
 #include "thanks.h"
 #include "vkeyinit.h"
+#include "vkeyinit2.h"
 
 #include "proxyform.h"
 
@@ -62,7 +63,7 @@ private slots:
 
     void on_pushButton_clicked();
     void initFinished();
-
+    void init2Finished();
 private:
     Ui::MainWindow *ui;
     qqmusic *q;
@@ -72,6 +73,7 @@ private:
     proxyForm *p;
 
     vkeyInit *vkeyinit;
+    vkeyinit2 *_vkeyinit2;
 
 
 };

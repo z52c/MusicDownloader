@@ -12,6 +12,7 @@ qqmusic::qqmusic(QObject *parent) : QObject(parent)
     connect(song,SIGNAL(status(QString)),this,SIGNAL(status(QString)));
     connect(song,SIGNAL(progress(qint64,qint64)),this,SIGNAL(progress(qint64,qint64)));
     connect(song,SIGNAL(finished(int)),this,SLOT(songDownloadFinished(int)));
+
 }
 
 void qqmusic::doJob(QString inlink)

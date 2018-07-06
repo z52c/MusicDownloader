@@ -163,10 +163,10 @@ void qqMusicSong::getSongLink()
         mp3Link=QString(DOWNLOADLINKHEAD)+QString("M800")+mediaMid+QString(".mp3")+QString(DOWNLOADLINKMID)+vkey+QString(DOWNLOADLINKGUID)+guid+QString(DOWNLOADLINKTAIL);
         break;
     case 3:
-        mp3Link=QString(DOWNLOADLINKHEAD)+QString("F000")+mediaMid+QString(".flac")+QString(DOWNLOADLINKMID)+vkey+QString(DOWNLOADLINKGUID)+guid+QString(DOWNLOADLINKTAIL);
+        mp3Link=QString(NDOWNLOADLINKHEAD)+QString("F000")+mediaMid+QString(".flac")+QString(NDOWNLOADLINKMID)+vkey2+QString(NDOWNLOADLINKTAIL);
         break;
     case 4:
-        mp3Link=QString(DOWNLOADLINKHEAD)+QString("A000")+mediaMid+QString(".ape")+QString(DOWNLOADLINKMID)+vkey+QString(DOWNLOADLINKGUID)+guid+QString(DOWNLOADLINKTAIL);
+        mp3Link=QString(NDOWNLOADLINKHEAD)+QString("A000")+mediaMid+QString(".ape")+QString(NDOWNLOADLINKMID)+vkey2+QString(NDOWNLOADLINKTAIL);
         break;
     default:
         mp3Link=QString(DOWNLOADLINKHEAD)+QString("M500")+mediaMid+QString(".mp3")+QString(DOWNLOADLINKMID)+vkey+QString(DOWNLOADLINKGUID)+guid+QString(DOWNLOADLINKTAIL);
