@@ -31,11 +31,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(_vkeyinit2,SIGNAL(status(QString)),this,SLOT(status(QString)));
     connect(_vkeyinit2,SIGNAL(finished()),this,SLOT(init2Finished()));
 
-    ui->radioButtonQualityape->setEnabled(false);
-    ui->radioButtonQualityflac->setEnabled(false);
+    //ui->radioButtonQualityape->setEnabled(false);
+    //ui->radioButtonQualityflac->setEnabled(false);
 
     ui->pushButtonDownload->setEnabled(false);
-    vkeyinit->init();
+    //vkeyinit->init();
+    _vkeyinit2->init();
 
 
 
@@ -54,8 +55,9 @@ void MainWindow::initFinished()
 
 void MainWindow::init2Finished()
 {
-    ui->radioButtonQualityape->setEnabled(true);
-    ui->radioButtonQualityflac->setEnabled(true);
+    //ui->radioButtonQualityape->setEnabled(true);
+    //ui->radioButtonQualityflac->setEnabled(true);
+    ui->pushButtonDownload->setEnabled(true);
 }
 
 void MainWindow::status(QString inString)
