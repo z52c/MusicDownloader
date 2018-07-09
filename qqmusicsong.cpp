@@ -88,7 +88,7 @@ void qqMusicSong::htmlGot()
         while(tmpArray.count()>0)
         {
             tmpObj=tmpArray.first().toObject();
-            singerName=singerName+QString("-")+tmpObj["name"].toString();
+            singerName=singerName+QString("/")+tmpObj["name"].toString();
             tmpArray.removeFirst();
             qDebug()<<singerName;
         }
@@ -132,7 +132,7 @@ void qqMusicSong::picDownloaded()
     tagtmp=new ID3tag(mp3FileName);
     connect(tagtmp,SIGNAL(finished()),this,SLOT(tagDone()));
     tagtmp->setTitle(songName);
-    tagtmp->setArtist(singerName);
+    tagtmp->setArtist(singerName.replace("-","/"));
     tagtmp->setAlbum(albumName);
     tagtmp->setPic(QString("tmp.jpg"));
     tagtmp->doJob();
@@ -178,9 +178,9 @@ void qqMusicSong::downloadSong()
 {
     getSongLink();
     if(songNameType==2)
-        mp3FileName=mp3Dir+QString("/")+singerName+QString("-")+songName;
+        mp3FileName=mp3Dir+QString("/")+singerName.replace("/","-")+QString("-")+songName;
     else
-        mp3FileName=mp3Dir+QString("/")+songName+QString("-")+singerName;
+        mp3FileName=mp3Dir+QString("/")+songName+QString("-")+singerName.replace("/","-");
     switch (songQuality) {
     case 1:
         mp3FileName=mp3FileName+QString("-128")+".mp3";
