@@ -1,6 +1,8 @@
 原来的QQMUsicDownloader，代码重写了，顺便改名叫MusicDownloader，应该会比之前的更加健壮了
-## 功能 ##
 
+
+在1.6.2开始的版本中增加Mac版本，在realease中下载解压后，双击执行目录下Contents/MacOS/musicDownloader 文件
+## 功能 ##
  1. 下载QQ音乐**单曲**
  2. 下载QQ音乐**专辑**下所有歌曲
  3. 下载QQ音乐**歌单**下所有歌曲
