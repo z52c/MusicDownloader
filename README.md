@@ -1,7 +1,8 @@
 原来的QQMUsicDownloader，代码重写了，顺便改名叫MusicDownloader，应该会比之前的更加健壮了
 
+1.7.0版本开始使用下载队列，保存在数据库中，不需要像之前一样下载完一个任务才能添加下一个任务，粘贴好链接，选择好格式音质目录，点下载即可添加到下载队列，想要停止，直接关闭程序即可，重新打开程序会从数据库中读取任务链接开始继续下载
 
-在1.6.2开始的版本中增加Mac版本，在realease中下载解压后，双击执行目录下Contents/MacOS/musicDownloader 文件
+在1.6.2开始的版本中增加Mac版本，在realease中下载解压后，双击执行目录下Contents/MacOS/musicDownloader 文件，如果打不开应该可以在设置里允许，或者在终端下找到指定文件，chmod +x musicDownder，再./musicDownloader
 ## 功能 ##
  1. 下载QQ音乐**单曲**
  2. 下载QQ音乐**专辑**下所有歌曲
