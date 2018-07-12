@@ -31,6 +31,13 @@ MainWindow::~MainWindow()
 void MainWindow::init2Finished()
 {
     ui->pushButtonDownload->setEnabled(true);
+    QList<struct downloadQueueInfo> tmp;
+    tmp=dq->getQueue();
+    while(tmp.count()>0)
+    {
+        ui->textEditDownloadQueueInfo->append(tmp.at(0).url);
+        tmp.removeAt(0);
+    }
 }
 
 void MainWindow::on_pushButtonChosePath_clicked()

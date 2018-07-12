@@ -13,6 +13,8 @@ downloadQueue::downloadQueue(QObject *parent) : QObject(parent)
     connect(np,SIGNAL(finished(int,QStringList)),q,SLOT(beginToDownload(int,QStringList)));
     connect(np,SIGNAL(status(QString)),this,SIGNAL(status(QString)));
 
+    doJob();
+
 }
 
 void downloadQueue::doJob()
@@ -31,7 +33,6 @@ void downloadQueue::doJob()
     case 2://网易云歌单下载（灰掉的）
         songNameType=tmp.nameType;songQuality=tmp.quality;mp3Dir=tmp.dir;np->doJob(true,tmp.url);
     }
-    qDebug()<<QString("quality in queue:%1").arg(tmp.quality);
 }
 
 void downloadQueue::oneTaskFinished()
@@ -52,7 +53,7 @@ void downloadQueue::insertQueue(int inFlag, int inQuality, int inNameType, QStri
     tmp.nameType=inNameType;
     tmp.dir=inDir;
     tmp.url=inUrl;
-    qDebug()<<QString("quality insert:%1").arg(inQuality);
+    db->insertDownloadQueue(inFlag,inQuality,inNameType,inDir,inUrl);
     queueList.append(tmp);
     if(!downloading)
         doJob();
