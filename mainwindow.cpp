@@ -4,7 +4,8 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
-{
+{   songNameType=0;
+    songQuality=0;
     ui->setupUi(this);
     dq=new downloadQueue();
     connect(dq,SIGNAL(downloadProgress(qint64,qint64)),this,SLOT(downloadProgress(qint64,qint64)));
@@ -82,11 +83,16 @@ void MainWindow::on_pushButtonDownload_clicked()
     mp3Dir=ui->lineEditMp3Path->text();
     if(!songNameType || !songQuality || ui->lineEditMp3Path->text().isEmpty() || ui->lineEditLink->text().isEmpty())
     {
-        ui->textEditNowInfo->append("请输入合法的设置");
+        ui->textEditFinishedInfo->append("请输入合法的设置");
     }
     else{
         if(ui->lineEditLink->text().contains("y.qq.com"))
         {
+            if(ui->lineEditLink->text().contains("num"))
+            {
+                ui->textEditFinishedInfo->append("请选择不含num的链接");
+                return;
+            }
             qDebug()<<QString("quality:%1").arg(songQuality);
             dq->insertQueue(0,songQuality,songNameType,mp3Dir,ui->lineEditLink->text());
             ui->textEditDownloadQueueInfo->append(ui->lineEditLink->text());
@@ -101,7 +107,7 @@ void MainWindow::on_pushButtonDownload_clicked()
                     dq->insertQueue(1,songQuality,songNameType,mp3Dir,ui->lineEditLink->text());
                 }
                 else{
-                    ui->textEditNowInfo->append("网易云音乐仅支持歌单下载，单曲以及专辑下载请使用qq音乐链接");
+                    ui->textEditFinishedInfo->append("网易云音乐仅支持歌单下载，单曲以及专辑下载请使用qq音乐链接");
                 }
             }
         }

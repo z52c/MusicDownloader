@@ -78,4 +78,4 @@ DISTFILES += \
     1.jpg \
     1.ico
 
-VERSION = 1.7.0
+VERSION = 1.7.1
