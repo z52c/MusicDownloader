@@ -6,186 +6,222 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>698</width>
-    <height>395</height>
+    <width>654</width>
+    <height>459</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>QQMusic&amp;NeteaseMusicDownloader</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_4">
+   <layout class="QVBoxLayout" name="verticalLayout_7">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_7">
+     <layout class="QVBoxLayout" name="verticalLayout_6">
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>链接：</string>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>链接：</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="lineEditLink"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>文件保存目录：</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="lineEditMp3Path">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButtonChosePath">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox">
+            <property name="title">
+             <string>名称格式</string>
             </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEditLink"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <item>
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>文件保存目录：</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEditMp3Path">
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButtonChosePath">
-            <property name="text">
-             <string>...</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="groupBox">
-          <property name="title">
-           <string>名称格式</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout">
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout">
+            <layout class="QVBoxLayout" name="verticalLayout">
              <item>
-              <widget class="QRadioButton" name="radioButtonSongNameType1">
-               <property name="text">
-                <string>歌名-歌手</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="radioButtonSongNameType2">
-               <property name="text">
-                <string>歌手-歌名</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="groupBox_2">
-          <property name="title">
-           <string>音质</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
-             <item>
-              <widget class="QRadioButton" name="radioButtonQuality128">
-               <property name="text">
-                <string>128</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="radioButtonQuality320">
-               <property name="text">
-                <string>320</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="radioButtonQualityflac">
-               <property name="text">
-                <string>flac</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="radioButtonQualityape">
-               <property name="text">
-                <string>ape</string>
-               </property>
-              </widget>
+              <layout class="QHBoxLayout" name="horizontalLayout">
+               <item>
+                <widget class="QRadioButton" name="radioButtonSongNameType1">
+                 <property name="text">
+                  <string>歌名-歌手</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButtonSongNameType2">
+                 <property name="text">
+                  <string>歌手-歌名</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </item>
             </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_5">
-          <item>
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>188</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButtonDownload">
-            <property name="text">
-             <string>下载</string>
-            </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButtonGray">
-            <property name="text">
-             <string>拯救网易云灰色歌曲</string>
+           <widget class="QGroupBox" name="groupBox_2">
+            <property name="title">
+             <string>音质</string>
             </property>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_4">
+               <item>
+                <widget class="QRadioButton" name="radioButtonQuality128">
+                 <property name="text">
+                  <string>128</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButtonQuality320">
+                 <property name="text">
+                  <string>320</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButtonQualityflac">
+                 <property name="text">
+                  <string>flac</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButtonQualityape">
+                 <property name="text">
+                  <string>ape</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
-            <property name="text">
-             <string>打开下载的位置</string>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>188</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButtonDownload">
+              <property name="text">
+               <string>下载</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButtonGray">
+              <property name="text">
+               <string>拯救网易云灰色歌曲</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton">
+              <property name="text">
+               <string>打开下载的位置</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <item>
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>当前歌曲进度</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QProgressBar" name="progressBar">
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_6">
-          <item>
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>当前歌曲进度</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QProgressBar" name="progressBar">
-            <property name="value">
-             <number>0</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <widget class="QTextEdit" name="textEditNowInfo"/>
         </item>
        </layout>
       </item>
       <item>
-       <widget class="QTextEdit" name="textEdit"/>
+       <layout class="QHBoxLayout" name="horizontalLayout_8">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>队列中的下载任务（第一行为当前任务）</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTextEdit" name="textEditDownloadQueueInfo"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>已完成的任务</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTextEdit" name="textEditFinishedInfo"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -196,7 +232,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>698</width>
+     <width>654</width>
      <height>23</height>
     </rect>
    </property>

@@ -1,17 +1,17 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2018-05-17T15:22:49
+# Project created by QtCreator 2018-07-12T15:31:35
 #
 #-------------------------------------------------
 
-QT       += core gui network
-
-RC_ICONS=1.ico
+QT       += core gui network sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = musicDownloader
 TEMPLATE = app
+
+RC_ICONS=1.ico
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -28,59 +28,54 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    downloader.cpp \
     daye.cpp \
-    qqmusicsong.cpp \
-    id3tag.cpp \
-    qqmusicplaylist.cpp \
-    qqmusicalbum.cpp \
-    qqmusic.cpp \
-    qqmusicsearch.cpp \
-    neteasesong.cpp \
-    neteaseplaylist.cpp \
-    thanks.cpp \
+    downloader.cpp \
     help.cpp \
+    id3tag.cpp \
     proxyform.cpp \
-    vkeyinit.cpp \
+    thanks.cpp \
+    db4musicdownloader.cpp \
+    downloadqueue.cpp \
+    neteaseplaylist.cpp \
+    neteasesong.cpp \
+    qqmusic.cpp \
+    qqmusicalbum.cpp \
+    qqmusicplaylist.cpp \
+    qqmusicsearch.cpp \
+    qqmusicsong.cpp \
     vkeyinit2.cpp
 
 HEADERS += \
         mainwindow.h \
-    downloader.h \
     config.h \
     daye.h \
-    qqmusicsong.h \
-    id3tag.h \
-    qqmusicplaylist.h \
-    qqmusicalbum.h \
-    qqmusic.h \
-    qqmusicsearch.h \
-    neteasesong.h \
-    neteaseplaylist.h \
-    thanks.h \
+    downloader.h \
     help.h \
+    id3tag.h \
     proxyform.h \
-    vkeyinit.h \
+    thanks.h \
+    db4musicdownloader.h \
+    downloadqueue.h \
+    neteaseplaylist.h \
+    neteasesong.h \
+    qqmusic.h \
+    qqmusicalbum.h \
+    qqmusicplaylist.h \
+    qqmusicsearch.h \
+    qqmusicsong.h \
     vkeyinit2.h
 
 FORMS += \
         mainwindow.ui \
     help.ui \
-    thanks.ui \
-    proxyform.ui
-
-VERSION = 1.6.2
-
-QMAKE_TARGET_PRODUCT = QQMusic&NeteaseMusicDownloader
-QMAKE_TARGET_COMPANY = z52c
-QMAKE_TARGET_DESCRIPTION = QQMusic&NeteaseMusicDownloader
-QMAKE_TARGET_COPYRIGHT = z52c
+    proxyform.ui \
+    thanks.ui
 
 RESOURCES += \
     pic.qrc
 
+DISTFILES += \
+    1.jpg \
+    1.ico
 
-LIBS += -L"C:/OpenSSL-Win32/lib" -llibssl
-LIBS += -L"C:/OpenSSL-Win32/lib" -llibcrypto
-
-INCLUDEPATH += C:/OpenSSL-Win32/include
+VERSION = 1.7.0

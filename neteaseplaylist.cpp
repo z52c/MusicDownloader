@@ -14,6 +14,7 @@ neteasePlaylist::neteasePlaylist(QObject *parent) : QObject(parent)
 
 void neteasePlaylist::doJob(bool inIsGray,QString inUrl)
 {
+    emit status("下载列表所有歌曲信息，此处需要耐心等待片刻,曲目数越多，等待时间越长");
     isGray=inIsGray;
     infoList.clear();
     grayList.clear();

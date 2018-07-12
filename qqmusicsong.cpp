@@ -54,7 +54,7 @@ void qqMusicSong::htmlGot()
         if(jsonError.error!=QJsonParseError::NoError)
         {
             qDebug() << "read singleSong json file failed";
-            emit("read singleSong json file failed");
+            emit status("read singleSong json file failed");
             file.close();
         }
         QJsonObject obj=doucment.object();

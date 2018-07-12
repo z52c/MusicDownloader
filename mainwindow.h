@@ -2,23 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "qqmusic.h"
-#include <QFileDialog>
-#include "neteaseplaylist.h"
+#include "downloadqueue.h"
 #include "help.h"
 #include "thanks.h"
-#include "vkeyinit.h"
 #include "vkeyinit2.h"
-
 #include "proxyform.h"
-
-extern int songNameType;
-extern int songQuality;
-extern QString mp3FileName;
-extern QString mp3Dir;
-extern QString vkey;
-extern QString guid;
-
+#include <QDesktopServices>
+#include <QFileDialog>
+#include <QtDebug>
 
 namespace Ui {
 class MainWindow;
@@ -33,11 +24,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
-    void qqmusicFinished();
-    void status(QString inString);
-
-    void on_pushButtonDownload_clicked();
+    void on_pushButtonChosePath_clicked();
 
     void on_radioButtonSongNameType1_clicked();
 
@@ -51,9 +38,17 @@ private slots:
 
     void on_radioButtonQualityape_clicked();
 
-    void on_pushButtonChosePath_clicked();
+    void status(QString inStr);
+    void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
+    void oneTaskFinished(QString inStr);
+
+    void on_pushButtonDownload_clicked();
 
     void on_pushButtonGray_clicked();
+
+    void init2Finished();
+
+    void on_pushButton_clicked();
 
     void on_action_triggered();
 
@@ -61,21 +56,18 @@ private slots:
 
     void on_action_3_triggered();
 
-    void on_pushButton_clicked();
-    void initFinished();
-    void init2Finished();
 private:
     Ui::MainWindow *ui;
-    qqmusic *q;
-    neteasePlaylist *n;
+    int songNameType;
+    int songQuality;
+    QString mp3Dir;
+
+    downloadQueue *dq;
+
     help *h;
     thanks *t;
     proxyForm *p;
-
-    vkeyInit *vkeyinit;
     vkeyinit2 *_vkeyinit2;
-
-
 };
 
 #endif // MAINWINDOW_H
