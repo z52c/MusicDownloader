@@ -27,6 +27,8 @@
  参考 [http://z52c.com/musicdownloader/][1]
 
  ![image](https://o05g5zevc.qnssl.com/e09bcd80-09af-4ce8-b225-ce89f0a388b1/TIM%E5%9B%BE%E7%89%8720180713231527.png?imageMogr2/auto-orient/strip/thumbnail/!1600x1600%3E)
+ 
+ Mac配图未更新，同上
 
  ![image](https://o05g5zevc.qnssl.com/2e1c3700-4ccb-49ed-9879-02efce9a752f/TIM%E5%9B%BE%E7%89%8720180709202927.png?imageMogr2/auto-orient/strip/thumbnail/!1600x1600%3E)
 
