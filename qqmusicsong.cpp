@@ -156,6 +156,7 @@ void qqMusicSong::getSongLink()
     if(sizeape==0 || songQuality == 2)
     {
         mp3Link=QString(NDOWNLOADLINKHEAD)+QString("M800")+mediaMid+QString(".mp3")+QString(NDOWNLOADLINKMID)+vkey2+QString(NDOWNLOADLINKTAIL);
+        return;
     }
 
     switch (songQuality) {
