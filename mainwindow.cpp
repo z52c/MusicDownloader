@@ -15,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
     h=new help();
     t=new thanks();
     p=new proxyForm();
+    _singerAllAlbum=new singerAllAlbum();
+    _singerAllAlbum->setDownloadQueue(dq);
 
     _vkeyinit2=new vkeyinit2();
     connect(_vkeyinit2,SIGNAL(status(QString)),this,SLOT(status(QString)));
@@ -170,4 +172,9 @@ void MainWindow::on_action_2_triggered()
 void MainWindow::on_action_3_triggered()
 {
     p->show();
+}
+
+void MainWindow::on_action_4_triggered()
+{
+    _singerAllAlbum->show();
 }

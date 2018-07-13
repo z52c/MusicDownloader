@@ -43,7 +43,8 @@ SOURCES += \
     qqmusicplaylist.cpp \
     qqmusicsearch.cpp \
     qqmusicsong.cpp \
-    vkeyinit2.cpp
+    vkeyinit2.cpp \
+    singerallalbum.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -63,13 +64,15 @@ HEADERS += \
     qqmusicplaylist.h \
     qqmusicsearch.h \
     qqmusicsong.h \
-    vkeyinit2.h
+    vkeyinit2.h \
+    singerallalbum.h
 
 FORMS += \
         mainwindow.ui \
     help.ui \
     proxyform.ui \
-    thanks.ui
+    thanks.ui \
+    singerallalbum.ui
 
 RESOURCES += \
     pic.qrc

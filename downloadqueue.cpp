@@ -41,8 +41,9 @@ void downloadQueue::oneTaskFinished()
     downloading=false;
     db->deleteFromDownloadQueue(queueList.at(0).url);
     queueList.removeAt(0);
-    doJob();
     emit finished(mp3Dir);
+    doJob();
+
 }
 
 void downloadQueue::insertQueue(int inFlag, int inQuality, int inNameType, QString inDir, QString inUrl)

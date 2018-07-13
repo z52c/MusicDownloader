@@ -249,8 +249,15 @@
     </property>
     <addaction name="action_3"/>
    </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>下载歌手所有专辑</string>
+    </property>
+    <addaction name="action_4"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -274,6 +281,11 @@
   <action name="action_3">
    <property name="text">
     <string>代理</string>
+   </property>
+  </action>
+  <action name="action_4">
+   <property name="text">
+    <string>下载歌手所有专辑</string>
    </property>
   </action>
  </widget>

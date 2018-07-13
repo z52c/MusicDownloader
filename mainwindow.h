@@ -10,6 +10,7 @@
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QtDebug>
+#include "singerallalbum.h"
 
 namespace Ui {
 class MainWindow;
@@ -56,6 +57,8 @@ private slots:
 
     void on_action_3_triggered();
 
+    void on_action_4_triggered();
+
 private:
     Ui::MainWindow *ui;
     int songNameType;
@@ -67,6 +70,7 @@ private:
     help *h;
     thanks *t;
     proxyForm *p;
+    singerAllAlbum *_singerAllAlbum;
     vkeyinit2 *_vkeyinit2;
 };
 

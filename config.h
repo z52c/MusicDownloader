@@ -55,6 +55,11 @@ struct downloadQueueInfo{
 #define SINGERLINKHEAD "https://y.qq.com/n/yqq/singer/"
 #define SINGERLINKTAIL ".html"
 
+#define SINGERALBUMHEAD "https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_album.fcg?g_tk=5381&jsonCallback=MusicJsonCallbacksinger_album&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&singermid="
+#define SINGERALBUMMID1 "&order=time&begin="
+#define SINGERALBUMMID2 "&num="
+#define SINGERALBUMTAIL "&exstatus=1"
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *    拼接歌手单曲列表下载链接：HEAD+SINGERMID+MID+BEGINNUM+TAIL*
  *    每页30个，下载后拼接文件，begin确定从哪一个开始             *
