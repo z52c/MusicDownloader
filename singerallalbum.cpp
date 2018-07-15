@@ -133,6 +133,12 @@ void singerAllAlbum::downloadFinished()
         {
             singerName=obj["singer_name"].toString();
             albumNum=obj["total"].toInt();
+            mp3Dir=mp3Dir+QString("/")+singerName;
+            QDir tmp(mp3Dir);
+            if(!tmp.exists())
+            {
+                tmp.mkdir(mp3Dir);
+            }
         }
         QJsonArray tmpArray=obj["list"].toArray();
 
@@ -156,7 +162,7 @@ void singerAllAlbum::downloadFinished()
     {
         while(albumList.count()>0)
         {
-            dq->insertQueue(0,songQuality,songNameType,mp3Dir+QString("/%1").arg(singerName),QString("https://y.qq.com/n/yqq/album/%1.html").arg(albumList.first()));
+            dq->insertQueue(0,songQuality,songNameType,mp3Dir,QString("https://y.qq.com/n/yqq/album/%1.html").arg(albumList.first()));
             albumList.removeFirst();
         }
         ui->pushButton->setEnabled(true);
