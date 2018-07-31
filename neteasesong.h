@@ -18,6 +18,7 @@ signals:
 public slots:
     void htmlFileGot();
     void htmlFileGotFailed(QString errorString);
+    void htmlGotRedirected(QString redirectString);
     void searchResultGot(int inFlag,QString inString);
 private:
     downloader *d;

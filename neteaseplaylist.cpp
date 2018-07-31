@@ -7,7 +7,7 @@ neteasePlaylist::neteasePlaylist(QObject *parent) : QObject(parent)
     d->setUserAgent(UA);
     connect(d,SIGNAL(finished()),this,SLOT(htmlGot()));
     connect(d,SIGNAL(downloadError(QString)),this,SLOT(htmlGotFailed(QString)));
-    connect(d,SIGNAL(redirected(QString)),this,SLOT(htmlGotFailed(QString)));
+    connect(d,SIGNAL(redirected(QString)),this,SLOT(htmlGotRedirected(QString)));
     s=new neteaseSong();
     connect(s,SIGNAL(finished(int,bool,QString)),this,SLOT(neteaseSongFinished(int,bool,QString)));
 }
@@ -52,6 +52,12 @@ void neteasePlaylist::htmlGotFailed(QString errorString)
 {
     emit status(QString("neteasePlaylist html failed:")+errorString);
     finished(-1,infoList);
+}
+
+void neteasePlaylist::htmlGotRedirected(QString redirectString)
+{
+    d->init(redirectString,SONGHTMLFILE);
+    d->doGet();
 }
 
 void neteasePlaylist::htmlGot()

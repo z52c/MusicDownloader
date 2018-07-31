@@ -6,7 +6,7 @@ neteaseSong::neteaseSong(QObject *parent) : QObject(parent)
     d->setUserAgent(UA);
     connect(d,SIGNAL(finished()),this,SLOT(htmlFileGot()));
     connect(d,SIGNAL(downloadError(QString)),this,SLOT(htmlFileGotFailed(QString)));
-    connect(d,SIGNAL(redirected(QString)),this,SLOT(htmlFileGotFailed(QString)));
+    connect(d,SIGNAL(redirected(QString)),this,SLOT(htmlGotRedirected(QString)));
 
     search=new qqMusicSearch();
     connect(search,SIGNAL(finished(int,QString)),this,SLOT(searchResultGot(int,QString)));
@@ -20,6 +20,11 @@ void neteaseSong::doJob(QString inMid)
     d->doGet();
 }
 
+void neteaseSong::htmlGotRedirected(QString redirectString)
+{
+    d->init(redirectString,QString(SONGHTMLFILE));
+    d->doGet();
+}
 
 void neteaseSong::htmlFileGotFailed(QString errorString)
 {

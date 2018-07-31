@@ -27,7 +27,9 @@ signals:
 public slots:
     void htmlGot();
     void htmlGotFailed(QString errorString);
+    void htmlGotRedirected(QString redirectString);
     void neteaseSongFinished(int inFlag,bool inIsGray,QString inString);
+
 private:
     QString mid;
     downloader *d;
