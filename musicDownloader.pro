@@ -81,4 +81,4 @@ DISTFILES += \
     1.jpg \
     1.ico
 
-VERSION = 1.8.2
+VERSION = 1.8.3

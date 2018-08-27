@@ -143,7 +143,7 @@ void MainWindow::on_pushButtonGray_clicked()
     if(ui->lineEditLink->text().contains("music.163.com")&&ui->lineEditLink->text().contains("playlist"))
     {
         ui->textEditDownloadQueueInfo->append(ui->lineEditLink->text());
-        dq->insertQueue(2,songNameType,songQuality,mp3Dir,ui->lineEditLink->text());
+        dq->insertQueue(2,songQuality,songNameType,mp3Dir,ui->lineEditLink->text());
     }
 }
 
