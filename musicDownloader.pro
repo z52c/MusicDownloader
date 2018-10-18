@@ -44,7 +44,8 @@ SOURCES += \
     qqmusicsearch.cpp \
     qqmusicsong.cpp \
     vkeyinit2.cpp \
-    singerallalbum.cpp
+    singerallalbum.cpp \
+    axeldownload.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -65,7 +66,8 @@ HEADERS += \
     qqmusicsearch.h \
     qqmusicsong.h \
     vkeyinit2.h \
-    singerallalbum.h
+    singerallalbum.h \
+    axeldownload.h
 
 FORMS += \
         mainwindow.ui \
@@ -81,4 +83,4 @@ DISTFILES += \
     1.jpg \
     1.ico
 
-VERSION = 1.8.3
+VERSION = 1.8.4

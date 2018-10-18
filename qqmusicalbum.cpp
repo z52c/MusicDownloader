@@ -52,6 +52,7 @@ void qqMusicAlbum::albumListGot()
         albumDirName.remove(QChar('?'));
         albumDirName.remove(QChar('/'));
         albumDirName.remove(QChar('\\'));
+        albumDirName.remove(QChar(':'));
         qDebug()<<albumDirName;
     }else{
         emit status("json 文件下载内容错误");

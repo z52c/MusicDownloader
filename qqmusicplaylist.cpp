@@ -57,6 +57,7 @@ void qqMusicPlaylist::playlistGot()
         playListName.remove(QChar('?'));
         playListName.remove(QChar('/'));
         playListName.remove(QChar('\\'));
+        playListName.remove(QChar(':'));
         qDebug()<<playListName;
     }
     else{

@@ -111,6 +111,7 @@ void neteasePlaylist::htmlGot()
     listTitle.remove(QChar('?'));
     listTitle.remove(QChar('/'));
     listTitle.remove(QChar('\\'));
+    listTitle.remove(QChar(':'));
 
     mp3Dir=mp3Dir+QString("/")+listTitle;
     QDir tmp(mp3Dir);
